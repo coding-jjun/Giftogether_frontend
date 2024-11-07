@@ -26,9 +26,8 @@ const DEFAULT_CREATE_GIFT_DTO: GiftDto = {
   id: 1,
   giftOrd: 1,
   giftImg: null,
+  giftTitle: "",
   giftUrl: "",
-  giftOpt: "",
-  giftCont: "",
 };
 
 function getInitialGifts() {

@@ -42,7 +42,6 @@ export default function AddressEditPage({
         </Typography>
       </TopFixedStack>
       <EditAddress
-        userId={1}
         address={address}
         onClose={() => router.push("/setting/address")}
       />

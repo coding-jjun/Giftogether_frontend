@@ -2,9 +2,10 @@ export default interface GiftDto {
   id: number;
   giftImg?: string | null;
   giftOrd: number;
+  giftTitle: string;
   giftUrl: string;
-  giftOpt: string;
-  giftCont: string;
+  giftOpt?: string;
+  giftCont?: string;
 }
 
 export interface ResponseGiftDto {

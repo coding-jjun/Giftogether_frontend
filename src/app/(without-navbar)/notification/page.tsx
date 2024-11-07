@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import FilterButtonGroup from "@/components/theme/components/FilterButtonGroup";
@@ -20,6 +21,7 @@ import {
 } from "@/types/Notification.enum";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import NotificationWrapper from "@/app/(without-navbar)/notification/view/NotificationWrapper";
+import EmptyState from "@/components/emptyState/EmptyState";
 
 export default function AlarmHistoryPage() {
   const router = useRouter();
@@ -112,7 +114,14 @@ export default function AlarmHistoryPage() {
                 />
               ))
           ) : (
-            <Typography>알림이 없어요</Typography>
+            <EmptyState
+              icon={
+                <NotificationsOffIcon sx={{ fontSize: 60, color: "#FFC107" }} />
+              }
+              title={"앗, 아직 도착한 알림이 없어요"}
+              message={"새로운 소식이 도착하면 알려드릴게요!"}
+              buttonText={"홈으로 가기"}
+            />
           )}
           <div
             ref={observerRef}

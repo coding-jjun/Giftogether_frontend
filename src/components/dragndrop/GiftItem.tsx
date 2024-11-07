@@ -165,8 +165,29 @@ export default function GiftItem({
             }}
           />
           <TextField
+            {...register(`gifts[${index - 1}].giftTitle`, {
+              required: "제목을 입력해주세요.",
+            })}
+            helperText={
+              giftsErrors?.[index - 1]?.giftTitle?.message?.toString() || ""
+            }
+            placeholder="제목"
+            size="small"
+            fullWidth
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+            sx={{
+              borderRadius: 4,
+              backgroundColor: "#ECF0EF",
+              "& .MuiFormHelperText-root": {
+                color: "#d32f2f",
+                pb: "2px",
+              },
+            }}
+          />
+          <TextField
             {...register(`gifts[${index - 1}].giftOpt`)}
-            placeholder="제품 옵션"
+            placeholder="옵션"
             size="small"
             fullWidth
             margin="dense"
@@ -186,7 +207,7 @@ export default function GiftItem({
             helperText={
               giftsErrors?.[index - 1]?.giftCont?.message?.toString() || ""
             }
-            placeholder="상품 설명"
+            placeholder="설명"
             size="small"
             fullWidth
             margin="dense"

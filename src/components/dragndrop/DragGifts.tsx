@@ -68,9 +68,8 @@ export default function DragGifts({ gifts, setGifts }: Props) {
           id: newId,
           giftOrd: currentGifts.length + 1,
           giftImg: null,
+          giftTitle: "",
           giftUrl: "",
-          giftOpt: "",
-          giftCont: "",
         },
       ];
     });
