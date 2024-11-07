@@ -26,19 +26,29 @@ export default function MyPageContent({ params }: Params) {
   const { data: loginUser } = useCurrentUserQuery();
   const { data: anotherUser } = useUserQuery(friendId);
 
-  const { data: ongoingFundingsQueryResponse } = useFundingsQuery(
-    {
-      status: "ongoing",
-    },
-    friendId,
-  );
+  // 나의 펀딩 - 진행중
+  const { data: ongoinMyFundingQueryResponse } = useFundingsQuery({
+    fundPublFilter: "mine",
+    status: "ongoing",
+  });
 
-  const { data: endedFundingsQueryResponse } = useFundingsQuery(
-    {
-      status: "ended",
-    },
-    friendId,
-  );
+  // 나의 펀딩 - 종료됨
+  const { data: endedMyFundingQueryResponse } = useFundingsQuery({
+    fundPublFilter: "mine",
+    status: "ended",
+  });
+
+  // 다른 사람들의 펀딩 - 진행중
+  const { data: ongoingOthersFundingQueryResponse } = useFundingsQuery({
+    fundPublFilter: "both",
+    status: "ongoing",
+  });
+
+  // 다른 사람들의 펀딩 - 종료됨
+  const { data: endedOthersFundingQueryResponse } = useFundingsQuery({
+    fundPublFilter: "both",
+    status: "ended",
+  });
 
   const handleTabChange = (
     event: SyntheticEvent,
@@ -51,7 +61,16 @@ export default function MyPageContent({ params }: Params) {
     router.push("/login");
   }
 
+  // 프로필 유저 정보
   const profileUser = friendId === myId ? loginUser : anotherUser;
+  const profileOngoingQuery =
+    friendId === myId
+      ? ongoinMyFundingQueryResponse
+      : ongoingOthersFundingQueryResponse;
+  const profileEndedQuery =
+    friendId === myId
+      ? endedMyFundingQueryResponse
+      : endedOthersFundingQueryResponse;
 
   if (!profileUser) {
     // TODO: 유저정보가 없을 때
@@ -65,14 +84,13 @@ export default function MyPageContent({ params }: Params) {
         tabs={[
           {
             label: `진행 중  ${
-              ongoingFundingsQueryResponse?.pages?.flatMap(
-                (page) => page.fundings,
-              ).length ?? 0
+              profileOngoingQuery?.pages?.flatMap((page) => page.fundings)
+                .length ?? 0
             }     `,
             value: "진행 중",
             panel: (
               <FundingList
-                fundings={ongoingFundingsQueryResponse?.pages?.flatMap(
+                fundings={profileOngoingQuery?.pages?.flatMap(
                   (page) => page.fundings,
                 )}
               />
@@ -80,14 +98,13 @@ export default function MyPageContent({ params }: Params) {
           },
           {
             label: `종료됨  ${
-              endedFundingsQueryResponse?.pages?.flatMap(
-                (page) => page.fundings,
-              ).length ?? 0
+              profileEndedQuery?.pages?.flatMap((page) => page.fundings)
+                .length ?? 0
             }     `,
             value: "종료됨",
             panel: (
               <FundingList
-                fundings={endedFundingsQueryResponse?.pages?.flatMap(
+                fundings={profileEndedQuery?.pages?.flatMap(
                   (page) => page.fundings,
                 )}
               />

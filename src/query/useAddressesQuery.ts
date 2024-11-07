@@ -13,7 +13,7 @@ const fetchAddresses = async (): Promise<AddressDto[]> => {
 const useAddressesQuery = (): UseQueryResult<AddressDto[]> => {
   return useQuery<AddressDto[]>({
     queryKey: ["addresses"],
-    queryFn: () => fetchAddresses(),
+    queryFn: fetchAddresses,
   });
 };
 

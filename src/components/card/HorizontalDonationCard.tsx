@@ -88,7 +88,6 @@ export default function HorizontalDonationCard({
         variant="contained"
         fullWidth
         disableElevation
-        color="grey"
         sx={{ backgroundColor: grey[300], color: grey[900] }}
       >
         {buttonText}
