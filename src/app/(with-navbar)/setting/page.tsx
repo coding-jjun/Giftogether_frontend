@@ -5,14 +5,9 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import useCurrentUserQuery from "@/query/useCurrentUserQuery";
-import { useRouter } from "next/navigation";
 export default function SettingPage() {
+  // TODO: 현재 로그인된 유저 조회 실패 시 로직 처리 필요
   const { data: user } = useCurrentUserQuery();
-  const router = useRouter();
-
-  if (!user) {
-    router.push("/login");
-  }
 
   return (
     <Stack direction="column" sx={{ marginTop: "20px" }}>
