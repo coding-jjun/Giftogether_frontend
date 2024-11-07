@@ -5,7 +5,7 @@ export const useCookie = <T = string>(key: string): T | undefined => {
   const [cookieValue, setCookieValue] = useState<T | undefined>(undefined);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    const handleCookieChange = () => {
       const value = Cookies.get(key);
       if (value) {
         try {
@@ -15,7 +15,13 @@ export const useCookie = <T = string>(key: string): T | undefined => {
           setCookieValue(value as T);
         }
       }
-    }
+    };
+
+    handleCookieChange();
+
+    window.addEventListener("focus", handleCookieChange);
+
+    return () => window.removeEventListener("focus", handleCookieChange);
   }, [key]);
 
   return cookieValue;

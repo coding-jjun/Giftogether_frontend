@@ -47,10 +47,6 @@ export default function MyPageContent({ params }: Params) {
     setTab(newTab);
   };
 
-  if (!loginUser) {
-    router.push("/login");
-  }
-
   const profileUser = friendId === myId ? loginUser : anotherUser;
 
   if (!profileUser) {
