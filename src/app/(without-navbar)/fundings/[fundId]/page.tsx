@@ -11,6 +11,7 @@ import { currentFundingAtom } from "@/store/atoms/funding";
 import { DetailActionBar } from "@/components/layout/action-bar";
 import { useRouter } from "next/navigation";
 import Appbar from "@/components/layout/appbar/appbar";
+import { useCookie } from "@/hook/useCookie";
 
 export default function FundingDetailPage({
   params,
@@ -21,17 +22,16 @@ export default function FundingDetailPage({
 
   const setCurrentFunding = useSetRecoilState(currentFundingAtom);
   const [isWriter, setIsWriter] = useState<boolean>(false);
-  // TODO: 로그인한 유저 아이디로 수정 필요
-  const currentUser = 1;
+  const loginUserId = useCookie<number>("userId");
 
   const router = useRouter();
 
   useEffect(() => {
     setCurrentFunding(funding);
-    if (currentUser) {
-      setIsWriter(currentUser === 1);
+    if (loginUserId) {
+      setIsWriter(loginUserId === funding?.fundUserId);
     }
-  }, [setCurrentFunding, funding, currentUser]);
+  }, [setCurrentFunding, funding, loginUserId]);
 
   const handleEdit = () => {
     router.push(`/fundings/${params.fundId}/edit`);
@@ -62,6 +62,7 @@ export default function FundingDetailPage({
           {!isWriter && (
             <DetailActionBar
               buttonText="선물하기"
+              // TODO: 후원 페이지 추가 필요
               handleSubmit={() => router.push(``)}
             />
           )}

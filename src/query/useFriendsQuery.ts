@@ -4,8 +4,8 @@ import { CommonResponse } from "@/types/CommonResponse";
 import { FriendQueryDto } from "@/types/Friend";
 
 interface QueryResponse {
-  result: FriendQueryDto[];
-  total: number;
+  result?: FriendQueryDto[];
+  total?: number;
 }
 
 const fetchFriends = async (userId: number): Promise<QueryResponse> => {
