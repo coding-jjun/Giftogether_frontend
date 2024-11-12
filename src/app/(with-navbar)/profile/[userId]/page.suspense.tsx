@@ -57,10 +57,6 @@ export default function MyPageContent({ params }: Params) {
     setTab(newTab);
   };
 
-  if (!loginUser) {
-    router.push("/login");
-  }
-
   // 프로필 유저 정보
   const profileUser = friendId === myId ? loginUser : anotherUser;
   const profileOngoingQuery =

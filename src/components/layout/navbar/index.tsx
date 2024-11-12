@@ -14,8 +14,8 @@ import { useCookie } from "@/hook/useCookie";
 
 export default function NavigationBar() {
   const router = useRouter();
-  const loginUserId = useCookie<number>("userId");
   const [tab, setTab] = useState("home");
+  const loginUserId = useCookie<string>("userId");
 
   // 모바일 사이트에서 접속했는지 / 앱에서 접속했는지 여부
   const isStandalone = useMediaQuery("(display-mode:standalone)");
