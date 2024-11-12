@@ -21,7 +21,10 @@ const useDeleteFunding = (fundUuid: string | undefined) => {
     mutationFn: (fundUuid: string | undefined) => deleteFunding(fundUuid),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["fundings", fundUuid],
+        queryKey: ["funding", fundUuid],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["fundings"],
       });
     },
   });

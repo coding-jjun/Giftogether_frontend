@@ -42,7 +42,7 @@ export default function FundingDetailPage({
   const handleDelete = () => {
     if (params.fundId === "") return;
     deleteFunding(params.fundId);
-    router.back();
+    router.push(`/profile/${loginUserId}`);
   };
 
   if (!funding) {
