@@ -8,8 +8,8 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import ProgressBarWithText from "@/components/progress/ProgressBarWithText";
 import { FundTheme, getFundThemeValue } from "@/types/Funding.enum";
+import NonProgressBar from "@/components/progress/NonProgressBar";
 
 interface CardProps {
   image: string;
@@ -17,6 +17,8 @@ interface CardProps {
   title: string;
   theme: FundTheme;
   endDate: string;
+  fundSum: number;
+  fundGoal: number;
   progress: number;
   handleClick: () => void;
 }
@@ -51,11 +53,7 @@ export default function VerticalImgCard({
           >
             {title}
           </Typography>
-          <ProgressBarWithText
-            progress={progress}
-            endDate={endDate}
-            textSize="body2"
-          />
+          <NonProgressBar progress={progress} endDate={endDate} />
         </CardContent>
       </CardActionArea>
     </MaterialCard>

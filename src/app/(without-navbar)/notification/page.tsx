@@ -120,7 +120,6 @@ export default function AlarmHistoryPage() {
               }
               title={"앗, 아직 도착한 알림이 없어요"}
               message={"새로운 소식이 도착하면 알려드릴게요!"}
-              buttonText={"홈으로 가기"}
             />
           )}
           <div
