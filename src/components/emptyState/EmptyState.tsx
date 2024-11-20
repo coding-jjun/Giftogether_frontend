@@ -1,22 +1,13 @@
-import { Box, Button, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 
 interface Props {
   icon: React.ReactNode;
   title: string;
   message?: string;
-  buttonText: string;
 }
 
-export default function EmptyState({
-  icon,
-  title,
-  message,
-  buttonText,
-}: Props) {
-  const router = useRouter();
-
+export default function EmptyState({ icon, title, message }: Props) {
   return (
     <Box
       sx={{
@@ -49,22 +40,6 @@ export default function EmptyState({
           <Typography sx={{ color: "#757575", mt: 1 }}>{message}</Typography>
         </Box>
       </Box>
-
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{
-          position: "fixed",
-          bottom: 75,
-          width: "90%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          borderRadius: "10px",
-        }}
-        onClick={() => router.back()}
-      >
-        {buttonText}
-      </Button>
     </Box>
   );
 }

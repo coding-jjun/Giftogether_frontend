@@ -7,8 +7,8 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import ProgressBarWithText from "@/components/progress/ProgressBarWithText";
 import { FundTheme, getFundThemeValue } from "@/types/Funding.enum";
+import NonProgressBar from "@/components/progress/NonProgressBar";
 
 interface Props {
   image: string;
@@ -16,6 +16,8 @@ interface Props {
   title: string;
   theme: FundTheme;
   endDate: string;
+  fundSum: number;
+  fundGoal: number;
   progress: number;
   handleClick: () => void;
 }
@@ -62,11 +64,7 @@ export default function HorizontalImgCard({
               width: "100%",
             }}
           >
-            <ProgressBarWithText
-              progress={progress}
-              endDate={endDate}
-              textSize="body2"
-            />
+            <NonProgressBar progress={progress} endDate={endDate} />
           </Box>
         </Box>
       </CardActionArea>

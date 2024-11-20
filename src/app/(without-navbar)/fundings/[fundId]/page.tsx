@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import Appbar from "@/components/layout/appbar/appbar";
 import { useCookie } from "@/hook/useCookie";
 import useDeleteFunding from "@/query/useDeleteFunding";
+import FundUserNick from "@/app/(without-navbar)/fundings/[fundId]/view/FundUserNick";
 
 export default function FundingDetailPage({
   params,
@@ -61,6 +62,7 @@ export default function FundingDetailPage({
         <Stack direction={"column"} spacing={1} sx={{ mt: 7 }}>
           <FundingThumbnail funding={funding} />
           <Stack padding={3} spacing={2}>
+            <FundUserNick funding={funding} />
             <FundingTitle funding={funding} />
             <FundingProgress funding={funding} />
           </Stack>
