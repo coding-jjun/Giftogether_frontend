@@ -12,12 +12,16 @@ export default function FundUserNick({ funding }: Props) {
   const router = useRouter();
 
   return (
-    <Stack direction="row" alignItems="center" spacing={1}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      spacing={1}
+      onClick={() => router.push(`/profile/${fundUserId}`)}
+    >
       <Avatar
         alt={`${fundUserNick}-profile`}
         src={fundUserImg ?? "/dummy/profile.webp"}
         sx={{ width: 30, height: 30 }}
-        onClick={() => router.push(`/profile/${fundUserId}`)}
       />
       <Typography variant={"body1"} color={grey[700]}>
         {fundUserNick}
