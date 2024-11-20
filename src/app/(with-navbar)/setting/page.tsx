@@ -8,13 +8,8 @@ import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import LogoutIcon from "@mui/icons-material/Logout";
 import useCurrentUserQuery from "@/query/useCurrentUserQuery";
 import axios from "axios";
+import { getCookieValue } from "@/hook/useCookie";
 
-function getCookieValue(cookieName: string) {
-  const matches = document.cookie.match(
-    new RegExp("(^| )" + cookieName + "=([^;]+)"),
-  );
-  return matches ? decodeURIComponent(matches[2]) : null;
-}
 export default function SettingPage() {
   // TODO: 현재 로그인된 유저 조회 실패 시 로직 처리 필요
   const { data: user } = useCurrentUserQuery();

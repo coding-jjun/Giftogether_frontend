@@ -13,9 +13,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { HorizontalImgCard, VerticalImgCard } from "@/components/card";
 import calculatePercent from "@/utils/calculatePercent";
 import styled from "@emotion/styled";
+import { getCookieValue } from "@/hook/useCookie";
+import { useEffect, useState } from "react";
 
 export default function MainPageContent() {
   const router = useRouter();
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    const cookieValue = getCookieValue("isLoggedIn");
+    setIsLoggedIn(cookieValue === "true");
+  }, []);
 
   // 나의 펀딩
   const { data: myFundingQueryResponse } = useFundingsQuery({
@@ -40,7 +49,8 @@ export default function MainPageContent() {
           }
           barSx={{ paddingBottom: "5px" }}
         />
-        {myFundingQueryResponse === undefined && (
+        {!isLoggedIn ||
+        !myFundingQueryResponse.pages.at(0)?.fundings?.length ? (
           <BoxButton
             handleClick={() => router.push("/fundings/creation")}
             content={
@@ -49,31 +59,35 @@ export default function MainPageContent() {
               </Typography>
             }
           />
+        ) : (
+          <MyFundingSwiper
+            pagination={true}
+            modules={[Pagination]}
+            style={{ width: "100%", height: "100%" }}
+          >
+            {myFundingQueryResponse?.pages
+              ?.flatMap((page) => page.fundings)
+              .map((funding) => (
+                <SwiperSlide key={`slide-${funding.fundUuid}`}>
+                  <HorizontalImgCard
+                    key={funding.fundUuid}
+                    image={funding.fundImg ?? "/dummy/present.webp"}
+                    userId={"Anonymous"} // TODO: 유저 닉네임 펀딩 조회시 받아올 수 있는지 확인
+                    title={funding.fundTitle}
+                    theme={funding.fundTheme}
+                    endDate={funding.endAt.toString()}
+                    progress={calculatePercent(
+                      funding.fundSum,
+                      funding.fundGoal,
+                    )}
+                    handleClick={() =>
+                      router.push(`/fundings/${funding.fundUuid}`)
+                    }
+                  />
+                </SwiperSlide>
+              ))}
+          </MyFundingSwiper>
         )}
-        <MyFundingSwiper
-          pagination={true}
-          modules={[Pagination]}
-          style={{ width: "100%", height: "100%" }}
-        >
-          {myFundingQueryResponse?.pages
-            ?.flatMap((page) => page.fundings)
-            .map((funding) => (
-              <SwiperSlide key={`slide-${funding.fundUuid}`}>
-                <HorizontalImgCard
-                  key={funding.fundUuid}
-                  image={funding.fundImg ?? "/dummy/present.webp"}
-                  userId={"Anonymous"} // TODO: 유저 닉네임 펀딩 조회시 받아올 수 있는지 확인
-                  title={funding.fundTitle}
-                  theme={funding.fundTheme}
-                  endDate={funding.endAt.toString()}
-                  progress={calculatePercent(funding.fundSum, funding.fundGoal)}
-                  handleClick={() =>
-                    router.push(`/fundings/${funding.fundUuid}`)
-                  }
-                />
-              </SwiperSlide>
-            ))}
-        </MyFundingSwiper>
         <SectionHeader
           title="다른 사람들의 펀딩"
           rightSlot={
