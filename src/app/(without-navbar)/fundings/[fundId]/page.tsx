@@ -12,6 +12,7 @@ import { DetailActionBar } from "@/components/layout/action-bar";
 import { useRouter } from "next/navigation";
 import Appbar from "@/components/layout/appbar/appbar";
 import { useCookie } from "@/hook/useCookie";
+import useDeleteFunding from "@/query/useDeleteFunding";
 
 export default function FundingDetailPage({
   params,
@@ -19,6 +20,7 @@ export default function FundingDetailPage({
   params: { fundId: string };
 }) {
   const { data: funding } = useFundingDetailQuery(params.fundId);
+  const { mutate: deleteFunding } = useDeleteFunding(params.fundId);
 
   const setCurrentFunding = useSetRecoilState(currentFundingAtom);
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -37,7 +39,11 @@ export default function FundingDetailPage({
     router.push(`/fundings/${params.fundId}/edit`);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    if (params.fundId === "") return;
+    deleteFunding(params.fundId);
+    router.push(`/profile/${loginUserId}`);
+  };
 
   if (!funding) {
     // TODO: fallback UI 작업 필요
