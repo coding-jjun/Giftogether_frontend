@@ -11,11 +11,16 @@ export function middleware(request: NextRequest) {
   }
 
   const accessToken = request.cookies.get("access_token");
+  const refreshToken = request.cookies.get("refresh_token");
   const userCookie = request.cookies.get("user");
 
   const userId = getUserIdFromCookie(userCookie?.value);
   if (userId) {
     response.cookies.set("userId", userId.toString());
+  }
+
+  if (refreshToken) {
+    response.cookies.set("refreshToken", refreshToken.value);
   }
 
   if (!accessToken && shouldCheckAuth(request)) {

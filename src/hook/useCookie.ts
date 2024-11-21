@@ -26,3 +26,10 @@ export const useCookie = <T = string>(key: string): T | undefined => {
 
   return cookieValue;
 };
+
+export const getCookieValue = (cookieName: string) => {
+  const matches = document.cookie.match(
+    new RegExp("(^| )" + cookieName + "=([^;]+)"),
+  );
+  return matches ? decodeURIComponent(matches[2]) : null;
+};
