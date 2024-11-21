@@ -72,10 +72,12 @@ export default function MainPageContent() {
                   <HorizontalImgCard
                     key={funding.fundUuid}
                     image={funding.fundImg ?? "/dummy/present.webp"}
-                    userId={"Anonymous"} // TODO: 유저 닉네임 펀딩 조회시 받아올 수 있는지 확인
+                    userId={funding.fundUserNick || "익명"}
                     title={funding.fundTitle}
                     theme={funding.fundTheme}
                     endDate={funding.endAt.toString()}
+                    fundSum={funding.fundSum}
+                    fundGoal={funding.fundGoal}
                     progress={calculatePercent(
                       funding.fundSum,
                       funding.fundGoal,
@@ -106,10 +108,12 @@ export default function MainPageContent() {
             <VerticalImgCard
               key={funding.fundUuid}
               image={funding.fundImg ?? "/dummy/present.webp"}
-              userId={"Anonymous"} // TODO: 유저 닉네임 펀딩 조회시 받아올 수 있는지 확인
+              userId={funding.fundUserNick || "익명"}
               title={funding.fundTitle}
               theme={funding.fundTheme}
               endDate={funding.endAt.toString()}
+              fundSum={funding.fundSum}
+              fundGoal={funding.fundGoal}
               progress={calculatePercent(funding.fundSum, funding.fundGoal)}
               handleClick={() => router.push(`/fundings/${funding.fundUuid}`)}
             />

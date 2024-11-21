@@ -25,10 +25,12 @@ export const FundingList = ({ fundings }: Props) => {
         <HorizontalImgCard
           key={funding.fundUuid}
           image={funding.fundImg ?? "/dummy/present.webp"}
-          userId={"Anonymous"}
+          userId={funding.fundUserNick || "익명"}
           title={funding.fundTitle}
           theme={funding.fundTheme}
           endDate={funding.endAt.toString()}
+          fundSum={funding.fundSum}
+          fundGoal={funding.fundGoal}
           progress={calculatePercent(funding.fundSum, funding.fundGoal)}
           handleClick={() => handleClickFunding(funding.fundUuid)}
         />

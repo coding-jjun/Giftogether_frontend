@@ -64,7 +64,6 @@ export default function FriendsListPage({ params }: Params) {
               }
               title={"앗, 아직 친구가 없어요"}
               message={"친구 목록을 불러올 수 있는 항목이 없습니다."}
-              buttonText={"확인"}
             />
           )}
         </List>

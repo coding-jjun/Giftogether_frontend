@@ -12,6 +12,8 @@ import { DetailActionBar } from "@/components/layout/action-bar";
 import { useRouter } from "next/navigation";
 import Appbar from "@/components/layout/appbar/appbar";
 import { useCookie } from "@/hook/useCookie";
+import useDeleteFunding from "@/query/useDeleteFunding";
+import FundUserNick from "@/app/(without-navbar)/fundings/[fundId]/view/FundUserNick";
 
 export default function FundingDetailPage({
   params,
@@ -19,6 +21,7 @@ export default function FundingDetailPage({
   params: { fundId: string };
 }) {
   const { data: funding } = useFundingDetailQuery(params.fundId);
+  const { mutate: deleteFunding } = useDeleteFunding(params.fundId);
 
   const setCurrentFunding = useSetRecoilState(currentFundingAtom);
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -37,7 +40,11 @@ export default function FundingDetailPage({
     router.push(`/fundings/${params.fundId}/edit`);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    if (params.fundId === "") return;
+    deleteFunding(params.fundId);
+    router.push(`/profile/${loginUserId}`);
+  };
 
   if (!funding) {
     // TODO: fallback UI 작업 필요
@@ -55,6 +62,7 @@ export default function FundingDetailPage({
         <Stack direction={"column"} spacing={1} sx={{ mt: 7 }}>
           <FundingThumbnail funding={funding} />
           <Stack padding={3} spacing={2}>
+            <FundUserNick funding={funding} />
             <FundingTitle funding={funding} />
             <FundingProgress funding={funding} />
           </Stack>
