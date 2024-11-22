@@ -29,8 +29,7 @@ export default function ProgressBarWithText({
   endDate,
   textSize,
 }: Props) {
-  const sum: number = 200000;
-  const progress: number = calculatePercent(sum, fundGoal);
+  const progress: number = calculatePercent(fundSum, fundGoal);
 
   return (
     <Box sx={{ width: "100%" }}>
