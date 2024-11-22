@@ -24,7 +24,7 @@ export default function GiftCard({
       <Stack
         direction="row"
         spacing={2}
-        alignItems="flex-start"
+        alignItems="center"
         sx={{
           border: "1px solid #e2e2e2",
           p: "10px",
@@ -39,29 +39,22 @@ export default function GiftCard({
         />
         <Stack
           id="content"
+          direction="column"
           justifyContent="space-between"
-          spacing={2}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "calc(100% - 120px)",
-            paddingY: "4px",
-          }}
+          spacing={1}
         >
-          <Stack direction="column">
-            <Typography
-              variant="body1"
-              component="div"
-              fontWeight="bold"
-              color={grey[800]}
-              margin="none"
-            >
-              {title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" margin="none">
-              {option}
-            </Typography>
-          </Stack>
+          <Typography
+            variant="body1"
+            component="div"
+            fontWeight="bold"
+            color={grey[800]}
+            margin="none"
+          >
+            {title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" margin="none">
+            {option}
+          </Typography>
           <Typography variant="body2" color={grey[600]}>
             {content}
           </Typography>
