@@ -52,5 +52,7 @@ const ThumbnailSwiper = styled(Swiper)`
     padding: 5px 10px;
     border-radius: 20px;
     border: none;
+    max-width: 52px;
+    margin-left: auto;
   }
 `;
