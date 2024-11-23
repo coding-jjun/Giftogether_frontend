@@ -45,9 +45,9 @@ export default function ProgressBarWithText({
           }}
         />
         {/* 달성률 */}
-        {/* 13% 미만: 미달성한 부분에 달성률 표시*/}
+        {/* 0 이상 13% 미만: 미달성한 부분에 달성률 표시*/}
         {/* 13% 이상: 달성한 부분에 달성률 표시*/}
-        {progress < 13 ? (
+        {0 < progress && progress < 13 ? (
           <Typography
             variant="body2"
             fontWeight={600}
