@@ -54,12 +54,16 @@ export default function NotificationWrapper({
         position: "relative",
       }}
     >
-      <Avatar
-        alt={`${sendNick}-profile`}
-        src={sendImg ?? "/dummy/profile.webp"}
-        sx={{ width: 30, height: 30 }}
-        onClick={handleClickUserProfile}
-      />
+      {notiType !== NotiType.FundClose &&
+        notiType !== NotiType.FundAchieve &&
+        notiType !== NotiType.WriteGratitude && (
+          <Avatar
+            alt={`${sendNick}-profile`}
+            src={sendImg ?? "/dummy/profile.webp"}
+            sx={{ width: 30, height: 30 }}
+            onClick={handleClickUserProfile}
+          />
+        )}
       <div style={{ width: "100%" }} onClick={handleClick}>
         <NotificationContent
           sender={sendNick}
