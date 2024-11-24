@@ -45,20 +45,39 @@ export default function ProgressBarWithText({
           }}
         />
         {/* 달성률 */}
-        <Typography
-          variant="body2"
-          fontWeight={600}
-          color="white"
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: `${Math.min(100, progress)}%`,
-            transform: "translate(-140%, -50%)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {`${progress}%`}
-        </Typography>
+        {/* 0 이상 13% 미만: 미달성한 부분에 달성률 표시*/}
+        {/* 13% 이상: 달성한 부분에 달성률 표시*/}
+        {0 < progress && progress < 13 ? (
+          <Typography
+            variant="body2"
+            fontWeight={600}
+            color="grey"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: `${Math.min(100, progress)}%`,
+              transform: "translate(30%, -50%)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {`${progress}%`}
+          </Typography>
+        ) : (
+          <Typography
+            variant="body2"
+            fontWeight={600}
+            color="white"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: `${Math.min(100, progress)}%`,
+              transform: "translate(-140%, -50%)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {`${progress}%`}
+          </Typography>
+        )}
       </Box>
 
       {/* 남은 금액, 남은 일자 */}
