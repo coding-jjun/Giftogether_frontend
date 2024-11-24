@@ -5,11 +5,12 @@ export interface Notification {
   recvId: number;
   sendId: number;
   sendNick: string;
-  senderImg: string;
+  sendImg: string;
   notiType: NotiType;
   subId?: string;
   notiTime: Date;
   fundTitle?: string;
+  isRead: boolean;
 }
 
 export interface NotificationQueryParam {
