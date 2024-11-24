@@ -7,15 +7,26 @@ import getTimeAgoText from "@/utils/getTimeAgoText";
 import IncomingFollowButtons from "@/app/(without-navbar)/notification/view/IncomingFollowButtons";
 import { NotiType } from "@/types/Notification.enum";
 import { useRouter } from "next/navigation";
+import useReadNotification from "@/query/useReadNotification";
 
 interface Props {
   notification: Notification;
+  entryTimeRef: React.MutableRefObject<Date>;
 }
 
-export default function NotificationWrapper({ notification }: Props) {
+export default function NotificationWrapper({
+  notification,
+  entryTimeRef,
+}: Props) {
   const router = useRouter();
-  const { sendId, senderImg, sendNick, notiType, subId, notiTime, fundTitle } =
+  const { sendId, sendImg, sendNick, notiType, subId, notiTime, fundTitle } =
     notification;
+  const { mutate: readNoti } = useReadNotification(entryTimeRef.current); // isRead: false -> true
+
+  const handleClickUserProfile = () => {
+    readNoti();
+    router.push(`/profile/${sendId}`);
+  };
 
   const handleClick = () => {
     if (
@@ -23,8 +34,10 @@ export default function NotificationWrapper({ notification }: Props) {
       notiType === NotiType.AcceptFollow ||
       notiType === NotiType.NewFriend
     ) {
+      readNoti();
       router.push(`/profile/${sendId}`);
     } else if (subId) {
+      readNoti();
       router.push(`/fundings/${subId}`);
     }
   };
@@ -36,16 +49,16 @@ export default function NotificationWrapper({ notification }: Props) {
       alignItems="flex-start"
       spacing={2}
       sx={{
-        pb: 3,
+        py: 1.5,
         width: "100%",
         position: "relative",
       }}
     >
       <Avatar
         alt={`${sendNick}-profile`}
-        src={senderImg ?? "/dummy/profile.webp"}
+        src={sendImg ?? "/dummy/profile.webp"}
         sx={{ width: 30, height: 30 }}
-        onClick={() => router.push(`/profile/${sendId}`)}
+        onClick={handleClickUserProfile}
       />
       <div style={{ width: "100%" }} onClick={handleClick}>
         <NotificationContent

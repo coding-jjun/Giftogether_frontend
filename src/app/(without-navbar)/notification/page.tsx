@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import FilterButtonGroup from "@/components/theme/components/FilterButtonGroup";
 import useNotificationsQuery from "@/query/useNotificationsQuery";
@@ -22,10 +22,15 @@ import {
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import NotificationWrapper from "@/app/(without-navbar)/notification/view/NotificationWrapper";
 import EmptyState from "@/components/emptyState/EmptyState";
+import useReadNotification from "@/query/useReadNotification";
 
 export default function AlarmHistoryPage() {
   const router = useRouter();
   const [filter, setFilter] = useState<NotiFilter>("all");
+
+  const entryTimeRef = useRef(new Date()); // 페이지 진입 시점 기록
+  const { mutate: readNoti } = useReadNotification(entryTimeRef.current); // isRead: false -> true
+
   const {
     data: notificationResponse,
     isLoading,
@@ -35,6 +40,12 @@ export default function AlarmHistoryPage() {
   } = useNotificationsQuery({
     notiFilter: filter,
   });
+
+  // 뒤로가기 버튼 클릭
+  const handleClick = () => {
+    readNoti();
+    router.back();
+  };
 
   // 무한 스크롤
   const loadMore = () => {
@@ -74,17 +85,15 @@ export default function AlarmHistoryPage() {
         sx={{ backgroundColor: "#fff", py: 2, px: 1 }}
       >
         <Toolbar>
-          <IconButton
-            edge="start"
-            aria-label="back"
-            onClick={() => router.back()}
-          >
+          <IconButton edge="start" aria-label="back" onClick={handleClick}>
             <ArrowBackIosNewIcon />
           </IconButton>
           <Typography fontWeight={700} variant="h5">
             알림
           </Typography>
         </Toolbar>
+
+        {/* 알림 필터 버튼 */}
         <FilterButtonGroup fullWidth>
           {Object.keys(NotiFilterMap).map((key) => (
             <Button
@@ -105,14 +114,39 @@ export default function AlarmHistoryPage() {
           ) : error ? (
             <Typography>로딩 중 에러</Typography>
           ) : notificationResponse.pages.length !== 0 ? (
-            notificationResponse?.pages
-              ?.flatMap((page) => page.noti)
-              .map((notification) => (
-                <NotificationWrapper
-                  key={`notification-${notification.notiId}`}
-                  notification={notification}
-                />
-              ))
+            <>
+              {/* 읽지 않은 알림 */}
+              {notificationResponse?.pages
+                ?.flatMap((page) => page.noti)
+                .filter((notification) => !notification.isRead)
+                .map((notification) => (
+                  <Stack
+                    spacing={1}
+                    sx={{ pb: 1, borderBottom: "0.5px solid lightgrey" }}
+                  >
+                    <Typography variant="body1" fontWeight={600}>
+                      읽지 않음
+                    </Typography>
+                    <NotificationWrapper
+                      key={`notification-${notification.notiId}`}
+                      notification={notification}
+                      entryTimeRef={entryTimeRef}
+                    />
+                  </Stack>
+                ))}
+
+              {/* 읽은 알림 */}
+              {notificationResponse?.pages
+                ?.flatMap((page) => page.noti)
+                .filter((notification) => notification.isRead)
+                .map((notification) => (
+                  <NotificationWrapper
+                    key={`notification-${notification.notiId}`}
+                    notification={notification}
+                    entryTimeRef={entryTimeRef}
+                  />
+                ))}
+            </>
           ) : (
             <EmptyState
               icon={
