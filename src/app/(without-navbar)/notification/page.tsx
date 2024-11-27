@@ -108,44 +108,93 @@ export default function AlarmHistoryPage() {
       </AppBar>
 
       <Box sx={{ mt: 17 }}>
-        <Stack spacing={2} sx={{ p: 2 }}>
+        <Stack spacing={2} sx={{ py: 2 }}>
           {isLoading ? (
             <Typography>Loading...</Typography>
           ) : error ? (
             <Typography>로딩 중 에러</Typography>
           ) : notificationResponse.pages.length !== 0 ? (
             <>
-              {/* 읽지 않은 알림 */}
-              {notificationResponse?.pages
-                ?.flatMap((page) => page.noti)
-                .filter((notification) => !notification.isRead)
-                .map((notification) => (
-                  <Stack
-                    spacing={1}
-                    sx={{ pb: 1, borderBottom: "0.5px solid lightgrey" }}
-                  >
-                    <Typography variant="body1" fontWeight={600}>
-                      읽지 않음
-                    </Typography>
-                    <NotificationWrapper
-                      key={`notification-${notification.notiId}`}
-                      notification={notification}
-                      entryTimeRef={entryTimeRef}
-                    />
-                  </Stack>
-                ))}
+              <Stack>
+                {/*읽지 않은 알림이 있을 때*/}
+                {notificationResponse?.pages
+                  ?.flatMap((page) => page.noti)
+                  .filter((notification) => !notification.isRead).length > 0 ? (
+                  <>
+                    {/* 읽지 않은 알림 */}
+                    {notificationResponse?.pages
+                      ?.flatMap((page) => page.noti)
+                      .filter((notification) => !notification.isRead)
+                      .map((notification) => (
+                        <NotificationWrapper
+                          key={`notification-${notification.notiId}`}
+                          notification={notification}
+                          entryTimeRef={entryTimeRef}
+                        />
+                      ))}
 
-              {/* 읽은 알림 */}
-              {notificationResponse?.pages
-                ?.flatMap((page) => page.noti)
-                .filter((notification) => notification.isRead)
-                .map((notification) => (
-                  <NotificationWrapper
-                    key={`notification-${notification.notiId}`}
-                    notification={notification}
-                    entryTimeRef={entryTimeRef}
-                  />
-                ))}
+                    {/* 이전 알림 문구 표시*/}
+                    <Stack>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          pt: 2,
+                          px: 1.5,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            flex: 1,
+                            borderBottom: "0.5px solid #bdbdbd",
+                            height: 0,
+                            marginRight: "8px",
+                          }}
+                        />
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "#bdbdbd" }}
+                        >
+                          이전 알림
+                        </Typography>
+                        <Box
+                          sx={{
+                            flex: 1,
+                            borderBottom: "0.5px solid #bdbdbd",
+                            height: 0,
+                            marginLeft: "8px",
+                          }}
+                        />
+                      </Box>
+                      {notificationResponse?.pages
+                        ?.flatMap((page) => page.noti)
+                        .filter((notification) => notification.isRead)
+                        .map((notification) => (
+                          <NotificationWrapper
+                            key={`notification-${notification.notiId}`}
+                            notification={notification}
+                            entryTimeRef={entryTimeRef}
+                          />
+                        ))}
+                    </Stack>
+                  </>
+                ) : (
+                  <>
+                    {/* 읽지 않은 알림이 없을 때: 이전 알림 문구 표시 없이 바로 읽은 알림 보여줌 */}
+                    {notificationResponse?.pages
+                      ?.flatMap((page) => page.noti)
+                      .filter((notification) => notification.isRead)
+                      .map((notification) => (
+                        <NotificationWrapper
+                          key={`notification-${notification.notiId}`}
+                          notification={notification}
+                          entryTimeRef={entryTimeRef}
+                        />
+                      ))}
+                  </>
+                )}
+              </Stack>
             </>
           ) : (
             <EmptyState
@@ -157,6 +206,7 @@ export default function AlarmHistoryPage() {
             />
           )}
           <div
+            className={"as"}
             ref={observerRef}
             style={{ height: "20px", background: "transparent" }}
           />
