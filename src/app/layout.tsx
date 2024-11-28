@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "../styles/global.css";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/components/theme";
 import { QueryClientProvider, RecoilRootProvider } from "@/components/provider";
@@ -21,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={inter.className} style={{ overflowX: "hidden" }}>
+      <body
+        className={inter.className}
+        style={{ overflowX: "hidden", margin: "0px" }}
+      >
         <RecoilRootProvider>
           <ThemeProvider theme={theme}>
             <OverlayProvider>
