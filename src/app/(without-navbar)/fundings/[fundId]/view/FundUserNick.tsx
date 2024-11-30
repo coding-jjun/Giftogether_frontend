@@ -21,7 +21,7 @@ export default function FundUserNick({ funding }: Props) {
       <Avatar
         alt={`${fundUserNick}-profile`}
         src={fundUserImg ?? "/dummy/profile.webp"}
-        sx={{ width: 30, height: 30 }}
+        sx={{ width: 25, height: 25 }}
       />
       <Typography variant={"body1"} color={grey[700]}>
         {fundUserNick}

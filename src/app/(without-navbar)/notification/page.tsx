@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import FilterButtonGroup from "@/components/theme/components/FilterButtonGroup";
 import useNotificationsQuery from "@/query/useNotificationsQuery";
@@ -22,10 +22,15 @@ import {
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import NotificationWrapper from "@/app/(without-navbar)/notification/view/NotificationWrapper";
 import EmptyState from "@/components/emptyState/EmptyState";
+import useReadNotification from "@/query/useReadNotification";
 
 export default function AlarmHistoryPage() {
   const router = useRouter();
   const [filter, setFilter] = useState<NotiFilter>("all");
+
+  const entryTimeRef = useRef(new Date()); // 페이지 진입 시점 기록
+  const { mutate: readNoti } = useReadNotification(entryTimeRef.current); // isRead: false -> true
+
   const {
     data: notificationResponse,
     isLoading,
@@ -35,6 +40,12 @@ export default function AlarmHistoryPage() {
   } = useNotificationsQuery({
     notiFilter: filter,
   });
+
+  // 뒤로가기 버튼 클릭
+  const handleClick = () => {
+    readNoti();
+    router.back();
+  };
 
   // 무한 스크롤
   const loadMore = () => {
@@ -74,17 +85,15 @@ export default function AlarmHistoryPage() {
         sx={{ backgroundColor: "#fff", py: 2, px: 1 }}
       >
         <Toolbar>
-          <IconButton
-            edge="start"
-            aria-label="back"
-            onClick={() => router.back()}
-          >
+          <IconButton edge="start" aria-label="back" onClick={handleClick}>
             <ArrowBackIosNewIcon />
           </IconButton>
           <Typography fontWeight={700} variant="h5">
             알림
           </Typography>
         </Toolbar>
+
+        {/* 알림 필터 버튼 */}
         <FilterButtonGroup fullWidth>
           {Object.keys(NotiFilterMap).map((key) => (
             <Button
@@ -99,20 +108,94 @@ export default function AlarmHistoryPage() {
       </AppBar>
 
       <Box sx={{ mt: 17 }}>
-        <Stack spacing={2} sx={{ p: 2 }}>
+        <Stack spacing={2} sx={{ py: 2 }}>
           {isLoading ? (
             <Typography>Loading...</Typography>
           ) : error ? (
             <Typography>로딩 중 에러</Typography>
           ) : notificationResponse.pages.length !== 0 ? (
-            notificationResponse?.pages
-              ?.flatMap((page) => page.noti)
-              .map((notification) => (
-                <NotificationWrapper
-                  key={`notification-${notification.notiId}`}
-                  notification={notification}
-                />
-              ))
+            <>
+              <Stack>
+                {/*읽지 않은 알림이 있을 때*/}
+                {notificationResponse?.pages
+                  ?.flatMap((page) => page.noti)
+                  .filter((notification) => !notification.isRead).length > 0 ? (
+                  <>
+                    {/* 읽지 않은 알림 */}
+                    {notificationResponse?.pages
+                      ?.flatMap((page) => page.noti)
+                      .filter((notification) => !notification.isRead)
+                      .map((notification) => (
+                        <NotificationWrapper
+                          key={`notification-${notification.notiId}`}
+                          notification={notification}
+                          entryTimeRef={entryTimeRef}
+                        />
+                      ))}
+
+                    {/* 이전 알림 문구 표시*/}
+                    <Stack>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          pt: 2,
+                          px: 1.5,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            flex: 1,
+                            borderBottom: "0.5px solid #bdbdbd",
+                            height: 0,
+                            marginRight: "8px",
+                          }}
+                        />
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "#bdbdbd" }}
+                        >
+                          이전 알림
+                        </Typography>
+                        <Box
+                          sx={{
+                            flex: 1,
+                            borderBottom: "0.5px solid #bdbdbd",
+                            height: 0,
+                            marginLeft: "8px",
+                          }}
+                        />
+                      </Box>
+                      {notificationResponse?.pages
+                        ?.flatMap((page) => page.noti)
+                        .filter((notification) => notification.isRead)
+                        .map((notification) => (
+                          <NotificationWrapper
+                            key={`notification-${notification.notiId}`}
+                            notification={notification}
+                            entryTimeRef={entryTimeRef}
+                          />
+                        ))}
+                    </Stack>
+                  </>
+                ) : (
+                  <>
+                    {/* 읽지 않은 알림이 없을 때: 이전 알림 문구 표시 없이 바로 읽은 알림 보여줌 */}
+                    {notificationResponse?.pages
+                      ?.flatMap((page) => page.noti)
+                      .filter((notification) => notification.isRead)
+                      .map((notification) => (
+                        <NotificationWrapper
+                          key={`notification-${notification.notiId}`}
+                          notification={notification}
+                          entryTimeRef={entryTimeRef}
+                        />
+                      ))}
+                  </>
+                )}
+              </Stack>
+            </>
           ) : (
             <EmptyState
               icon={
@@ -123,6 +206,7 @@ export default function AlarmHistoryPage() {
             />
           )}
           <div
+            className={"as"}
             ref={observerRef}
             style={{ height: "20px", background: "transparent" }}
           />

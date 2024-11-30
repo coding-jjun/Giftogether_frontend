@@ -13,6 +13,7 @@ export interface ResponseGiftDto {
   fundId: number;
   giftUrl: string;
   giftOrd: number;
+  giftTitle: string;
   giftOpt: string;
   giftCont: string;
   giftImg: string;

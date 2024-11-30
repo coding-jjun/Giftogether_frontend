@@ -61,7 +61,7 @@ export default function FundingDetailPage({
       {funding && (
         <Stack direction={"column"} spacing={1} sx={{ mt: 7 }}>
           <FundingThumbnail funding={funding} />
-          <Stack padding={3} spacing={2}>
+          <Stack padding={2} spacing={1}>
             <FundUserNick funding={funding} />
             <FundingTitle funding={funding} />
             <FundingProgress funding={funding} />

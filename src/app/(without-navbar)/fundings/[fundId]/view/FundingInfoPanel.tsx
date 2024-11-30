@@ -20,7 +20,7 @@ export default function FundingInfoPanel({ funding }: Props) {
       {gifts.map((gift, index) => (
         <GiftCard
           key={gift.giftId}
-          title={`선물 ${index}`}
+          title={gift.giftTitle}
           image={gift.giftImg ?? "/dummy/present.png"}
           option={gift.giftOpt}
           content={gift.giftCont}
