@@ -1,7 +1,7 @@
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
-  padding: "12px",
+  padding: "16px",
 });
 
 export const header = style({
@@ -32,7 +32,7 @@ export const logo = style({
 });
 
 export const content = style({
-  paddingTop: "45px",
+  paddingTop: "40px",
   paddingBottom: "100px",
 });
 
