@@ -1,13 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import localFont from "next/font/local";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/components/theme";
 import { QueryClientProvider, RecoilRootProvider } from "@/components/provider";
 import { OverlayProvider } from "@/components/overlay";
 import { ToastProvider } from "@/components/toast";
+import "@/styles/global.css";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const pretendard = localFont({
+  src: [
+    {
+      path: "../../public/font/PretendardVariable.woff2",
+      weight: "45 920",
+      style: "normal",
+    },
+  ],
+  variable: "--font-pretendard",
+});
 
 export const metadata: Metadata = {
   title: "기프투게더",
@@ -22,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={inter.className}
+        className={pretendard.className}
         style={{ overflowX: "hidden", margin: "0px" }}
       >
         <RecoilRootProvider>

@@ -23,7 +23,7 @@ export const logo = style({
   fontSize: "24px",
   fontWeight: 700,
   color: "#424242",
-  fontFamily: "yg-jalnan",
+  fontFamily: "Jalnan",
   background: "none",
   border: "none",
   display: "flex",
