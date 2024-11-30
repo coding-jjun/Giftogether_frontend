@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "../styles/global.css";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/components/theme";
 import { QueryClientProvider, RecoilRootProvider } from "@/components/provider";
