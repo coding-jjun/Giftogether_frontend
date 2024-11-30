@@ -19,6 +19,7 @@ import {
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import useFundingsQuery from "@/query/useFundingsQuery";
 import FilterSelectBar from "@/app/(with-navbar)/fundings/view/FilterSelectBar";
+import PullToRefresh from "@/components/refresh/PullToRefresh";
 
 export default function FundingListContent() {
   const router = useRouter();
@@ -34,6 +35,7 @@ export default function FundingListContent() {
     data: fundingQueryResponse,
     fetchNextPage,
     hasNextPage,
+    refetch,
   } = useFundingsQuery({
     fundThemes: themes.map((value) => getFundThemeKey(value)),
     fundPublFilter: getPublFilterKey(visibility),
@@ -57,28 +59,31 @@ export default function FundingListContent() {
   });
 
   return (
-    <Stack direction="column" spacing={2} sx={{ mt: 3 }}>
-      <FilterSelectBar />
-      {fundingQueryResponse?.pages
-        ?.flatMap((page) => page.fundings)
-        .map((funding) => (
-          <VerticalImgCard
-            key={funding.fundUuid}
-            image={funding.fundImg ?? "/dummy/present.webp"}
-            userId={funding.fundUserNick || "익명"}
-            title={funding.fundTitle}
-            theme={funding.fundTheme}
-            endDate={funding.endAt.toString()}
-            fundSum={funding.fundSum}
-            fundGoal={funding.fundGoal}
-            progress={calculatePercent(funding.fundSum, funding.fundGoal)}
-            handleClick={() => router.push(`/fundings/${funding.fundUuid}`)}
-          />
-        ))}
-      <div
-        ref={observerRef}
-        style={{ height: "20px", background: "transparent" }}
-      />
-    </Stack>
+    <>
+      <PullToRefresh refreshData={refetch} />
+      <Stack direction="column" spacing={2}>
+        <FilterSelectBar />
+        {fundingQueryResponse?.pages
+          ?.flatMap((page) => page.fundings)
+          .map((funding) => (
+            <VerticalImgCard
+              key={funding.fundUuid}
+              image={funding.fundImg ?? "/dummy/present.webp"}
+              userId={funding.fundUserNick || "익명"}
+              title={funding.fundTitle}
+              theme={funding.fundTheme}
+              endDate={funding.endAt.toString()}
+              fundSum={funding.fundSum}
+              fundGoal={funding.fundGoal}
+              progress={calculatePercent(funding.fundSum, funding.fundGoal)}
+              handleClick={() => router.push(`/fundings/${funding.fundUuid}`)}
+            />
+          ))}
+        <div
+          ref={observerRef}
+          style={{ height: "20px", background: "transparent" }}
+        />
+      </Stack>
+    </>
   );
 }

@@ -15,6 +15,7 @@ import calculatePercent from "@/utils/calculatePercent";
 import styled from "@emotion/styled";
 import { getCookieValue } from "@/hook/useCookie";
 import { useEffect, useState } from "react";
+import PullToRefresh from "@/components/refresh/PullToRefresh";
 
 export default function MainPageContent() {
   const router = useRouter();
@@ -27,18 +28,25 @@ export default function MainPageContent() {
   }, []);
 
   // 나의 펀딩
-  const { data: myFundingQueryResponse } = useFundingsQuery({
-    fundPublFilter: "mine",
-  });
+  const { data: myFundingQueryResponse, refetch: refetchMyFundings } =
+    useFundingsQuery({
+      fundPublFilter: "mine",
+    });
 
   // 다른 사람들의 펀딩
-  const { data: othersFundingQueryResponse } = useFundingsQuery({
-    fundPublFilter: "both",
-    limit: 5,
-  });
+  const { data: othersFundingQueryResponse, refetch: refetchOthersFundings } =
+    useFundingsQuery({
+      fundPublFilter: "both",
+      limit: 5,
+    });
+
+  const refetch = async () => {
+    await Promise.all([refetchMyFundings(), refetchOthersFundings()]);
+  };
 
   return (
     <>
+      <PullToRefresh refreshData={refetch} />
       <Stack direction="column" spacing={1}>
         <SectionHeader
           title="나의 펀딩"
