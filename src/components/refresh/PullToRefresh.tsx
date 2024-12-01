@@ -7,7 +7,7 @@ interface PullToRefreshProps {
   refreshData: () => Promise<any>;
 }
 
-const PullToRefresh: React.FC<PullToRefreshProps> = ({ refreshData }) => {
+const PullToRefresh = ({ refreshData }: PullToRefreshProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [startScroll, setStartScroll] = useState(0);
 
