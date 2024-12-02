@@ -101,7 +101,7 @@ export default function AddAddress({ onClose }: Props) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: window.innerHeight * 0.71,
+        height: "71dvh",
       }}
     >
       <AppBar

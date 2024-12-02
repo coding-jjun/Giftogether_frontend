@@ -5,6 +5,7 @@ import { grey } from "@mui/material/colors";
 const typography:
   | TypographyOptions
   | ((palette: Palette) => TypographyOptions) = {
+  fontFamily: `var(--font-pretendard)`,
   h1: {
     color: grey[800],
   },
