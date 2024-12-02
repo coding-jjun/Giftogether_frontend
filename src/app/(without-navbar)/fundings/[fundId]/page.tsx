@@ -14,13 +14,14 @@ import Appbar from "@/components/layout/appbar/appbar";
 import { useCookie } from "@/hook/useCookie";
 import useDeleteFunding from "@/query/useDeleteFunding";
 import FundUserNick from "@/app/(without-navbar)/fundings/[fundId]/view/FundUserNick";
+import PullToRefresh from "@/components/refresh/PullToRefresh";
 
 export default function FundingDetailPage({
   params,
 }: {
   params: { fundId: string };
 }) {
-  const { data: funding } = useFundingDetailQuery(params.fundId);
+  const { data: funding, refetch } = useFundingDetailQuery(params.fundId);
   const { mutate: deleteFunding } = useDeleteFunding(params.fundId);
 
   const setCurrentFunding = useSetRecoilState(currentFundingAtom);
@@ -58,6 +59,7 @@ export default function FundingDetailPage({
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
+      <PullToRefresh refreshData={refetch} />
       {funding && (
         <Stack direction={"column"} spacing={1} sx={{ mt: 7 }}>
           <FundingThumbnail funding={funding} />
