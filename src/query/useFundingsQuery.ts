@@ -62,7 +62,7 @@ const fetchFundings = async (
 };
 
 interface PageParam {
-  lastFundId: number | undefined;
+  lastFundUuid: number | undefined;
   lastEndAt: string | undefined;
 }
 
@@ -79,20 +79,25 @@ const useFundingsQuery = (
   >({
     queryKey: ["fundings", userId, queryParams],
     queryFn: ({
-      pageParam = { lastFundId: undefined, lastEndAt: undefined },
+      pageParam = { lastFundUuid: undefined, lastEndAt: undefined },
     }) =>
       fetchFundings(userId ?? Number(Cookies.get("userId")), {
         ...queryParams,
-        lastFundId: pageParam.lastFundId,
+        lastFundUuid: pageParam.lastFundUuid,
         lastEndAt: pageParam.lastEndAt,
       }),
-    initialPageParam: { lastFundId: undefined, lastEndAt: undefined },
+    initialPageParam: { lastFundUuid: undefined, lastEndAt: undefined },
     getNextPageParam: (lastPage) => {
+      console.log("lastPage Count: ", lastPage, "limit: ", queryParams?.limit);
+
       if (lastPage.count < (queryParams?.limit ?? 1)) {
         return undefined;
       }
 
-      return { lastFundId: lastPage.lastFundId, lastEndAt: lastPage.lastEndAt };
+      return {
+        lastFundUuid: lastPage.lastFundUuid,
+        lastEndAt: lastPage.lastEndAt,
+      };
     },
   });
 };
