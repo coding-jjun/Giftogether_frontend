@@ -62,7 +62,7 @@ const fetchFundings = async (
 };
 
 interface PageParam {
-  lastFundUuid: number | undefined;
+  lastFundUuid: string | undefined;
   lastEndAt: string | undefined;
 }
 

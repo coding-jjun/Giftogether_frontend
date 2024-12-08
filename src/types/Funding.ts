@@ -90,13 +90,13 @@ export interface FundingQueryParam {
   status: FundingStatus;
   sort: FundingSort;
   limit: number;
-  lastFundId: number;
+  lastFundUuid?: string;
   lastEndAt: string;
 }
 
 export interface FundingQueryResponse {
   fundings: Funding[];
   count: number;
-  lastFundId: number;
+  lastFundUuid?: string;
   lastEndAt?: string;
 }
