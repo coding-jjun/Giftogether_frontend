@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { Stack } from "@mui/material";
+import { Menu, MenuItem, Stack } from "@mui/material";
 import useFundingDetailQuery from "@/query/useFundingDetailQuery";
 import FundingPageTab from "@/app/(without-navbar)/fundings/[fundId]/view/FundingPageTab";
 import FundingTitle from "@/app/(without-navbar)/fundings/[fundId]/view/FundingTitle";
@@ -10,17 +10,27 @@ import FundingThumbnail from "@/app/(without-navbar)/fundings/[fundId]/view/Fund
 import { currentFundingAtom } from "@/store/atoms/funding";
 import { DetailActionBar } from "@/components/layout/action-bar";
 import { useRouter } from "next/navigation";
-import Appbar from "@/components/layout/appbar/appbar";
 import { useCookie } from "@/hook/useCookie";
 import useDeleteFunding from "@/query/useDeleteFunding";
 import FundUserNick from "@/app/(without-navbar)/fundings/[fundId]/view/FundUserNick";
 import PullToRefresh from "@/components/refresh/PullToRefresh";
+import LayoutWithPrev from "@/components/layout/layout-with-prev";
 
 export default function FundingDetailPage({
   params,
 }: {
   params: { fundId: string };
 }) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const { data: funding, refetch } = useFundingDetailQuery(params.fundId);
   const { mutate: deleteFunding } = useDeleteFunding(params.fundId);
 
@@ -53,15 +63,32 @@ export default function FundingDetailPage({
   }
 
   return (
-    <>
-      <Appbar
-        showMenuIcon={isWriter}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+    <LayoutWithPrev
+      actionBar={
+        isWriter ? null : (
+          <DetailActionBar
+            buttonText="선물하기"
+            // TODO: 후원 페이지 추가 필요
+            handleSubmit={() => router.push(``)}
+          />
+        )
+      }
+      showMoreIcon={isWriter}
+      onClickMore={handleMenuOpen}
+    >
+      {isWriter && (
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleEdit}>수정</MenuItem>
+          <MenuItem onClick={handleDelete}>삭제</MenuItem>
+        </Menu>
+      )}
       <PullToRefresh refreshData={refetch} />
       {funding && (
-        <Stack direction={"column"} spacing={1} sx={{ mt: 7 }}>
+        <Stack direction={"column"} spacing={1}>
           <FundingThumbnail funding={funding} />
           <Stack padding={2} spacing={1}>
             <FundUserNick funding={funding} />
@@ -69,15 +96,8 @@ export default function FundingDetailPage({
             <FundingProgress funding={funding} />
           </Stack>
           <FundingPageTab funding={funding} />
-          {!isWriter && (
-            <DetailActionBar
-              buttonText="선물하기"
-              // TODO: 후원 페이지 추가 필요
-              handleSubmit={() => router.push(``)}
-            />
-          )}
         </Stack>
       )}
-    </>
+    </LayoutWithPrev>
   );
 }

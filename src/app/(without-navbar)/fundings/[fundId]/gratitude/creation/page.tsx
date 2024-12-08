@@ -1,16 +1,15 @@
 "use client";
 import { ChangeEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, IconButton, Stack, TextField } from "@mui/material";
+import { Box, Stack, TextField } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CoverImage from "@/components/image/CoverImage";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { TopFixedStack } from "@/components/layout/action-bar/TopFixedStack";
 import { ActionBarButton } from "@/components/layout/action-bar/ActionBarButton";
 import ActionBar from "@/components/layout/action-bar/ActionBar";
 import useAddGratitude from "@/query/useAddGratitude";
 import { GratitudeDto } from "@/types/Gratitude";
 import useUploadImage from "@/hook/useUploadImage";
+import LayoutWithPrev from "@/components/layout/layout-with-prev";
 
 interface Params {
   fundId: string;
@@ -86,17 +85,23 @@ export default function GratitudeCreationPage({ params }: { params: Params }) {
   };
 
   return (
-    <>
-      <TopFixedStack direction="row" alignItems="center">
-        <IconButton onClick={() => router.back()}>
-          <ArrowBackIosNewIcon />
-        </IconButton>
-      </TopFixedStack>
+    <LayoutWithPrev
+      actionBar={
+        <ActionBar>
+          <ActionBarButton
+            variant="contained"
+            loading={isPending}
+            onClick={handleSubmit}
+          >
+            등록하기
+          </ActionBarButton>
+        </ActionBar>
+      }
+    >
       <Stack
         sx={{
           width: "100%",
           margin: "auto",
-          marginTop: "65px",
           boxSizing: "border-box",
           padding: 2,
         }}
@@ -160,15 +165,6 @@ export default function GratitudeCreationPage({ params }: { params: Params }) {
           onChange={handleChangeContent}
         />
       </Stack>
-      <ActionBar>
-        <ActionBarButton
-          variant="contained"
-          loading={isPending}
-          onClick={handleSubmit}
-        >
-          등록하기
-        </ActionBarButton>
-      </ActionBar>
-    </>
+    </LayoutWithPrev>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { Box, CssBaseline, Grid } from "@mui/material";
 import { DetailActionBar } from "@/components/layout/action-bar";
 import useFundingCreateQuery from "@/query/useFundingCreatQuery";
@@ -16,7 +16,7 @@ import InputComponent from "@/app/(without-navbar)/fundings/creation/view/InputC
 import GiftComponent from "@/app/(without-navbar)/fundings/creation/view/GiftComponent";
 import AddressComponent from "@/app/(without-navbar)/fundings/creation/view/AddressComponent";
 import { DRAWER_BLEEDING } from "@/constants/constants";
-import Appbar from "@/components/layout/appbar/appbar";
+import LayoutWithPrev from "@/components/layout/layout-with-prev";
 
 const Root = styled("div")(() => ({
   height: "100%",
@@ -86,7 +86,17 @@ export default function FundingCreationPage() {
   };
 
   return (
-    <>
+    <LayoutWithPrev
+      title="펀딩 등록"
+      actionBar={
+        <div style={{ display: openBottomSheet ? "none" : "block" }}>
+          <DetailActionBar
+            buttonText="작성하기"
+            handleSubmit={methods.handleSubmit(onSubmit)}
+          />
+        </div>
+      }
+    >
       <Root>
         <CssBaseline />
         <Global
@@ -99,10 +109,7 @@ export default function FundingCreationPage() {
             },
           }}
         />
-
-        <Appbar title={"펀딩 등록"} />
-
-        <Box sx={{ padding: 2, mt: 8 }}>
+        <Box sx={{ padding: 2 }}>
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
@@ -123,12 +130,6 @@ export default function FundingCreationPage() {
           </FormProvider>
         </Box>
       </Root>
-      <div style={{ display: openBottomSheet ? "none" : "block" }}>
-        <DetailActionBar
-          buttonText="작성하기"
-          handleSubmit={methods.handleSubmit(onSubmit)}
-        />
-      </div>
-    </>
+    </LayoutWithPrev>
   );
 }
