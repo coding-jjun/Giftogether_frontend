@@ -23,6 +23,7 @@ import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import NotificationWrapper from "@/app/(without-navbar)/notification/view/NotificationWrapper";
 import EmptyState from "@/components/emptyState/EmptyState";
 import useReadNotification from "@/query/useReadNotification";
+import LayoutWithPrev from "@/components/layout/layout-with-prev";
 
 export default function AlarmHistoryPage() {
   const router = useRouter();
@@ -78,36 +79,20 @@ export default function AlarmHistoryPage() {
   });
 
   return (
-    <>
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{ backgroundColor: "#fff", py: 2, px: 1 }}
-      >
-        <Toolbar>
-          <IconButton edge="start" aria-label="back" onClick={handleClick}>
-            <ArrowBackIosNewIcon />
-          </IconButton>
-          <Typography fontWeight={700} variant="h5">
-            알림
-          </Typography>
-        </Toolbar>
+    <LayoutWithPrev title="알림">
+      <FilterButtonGroup fullWidth>
+        {Object.keys(NotiFilterMap).map((key) => (
+          <Button
+            key={key}
+            onClick={() => handleFilterChange(key as NotiFilter)}
+            style={filterButtonStyle(key === filter)}
+          >
+            {getNotiFilterValue(key as NotiFilter)}
+          </Button>
+        ))}
+      </FilterButtonGroup>
 
-        {/* 알림 필터 버튼 */}
-        <FilterButtonGroup fullWidth>
-          {Object.keys(NotiFilterMap).map((key) => (
-            <Button
-              key={key}
-              onClick={() => handleFilterChange(key as NotiFilter)}
-              style={filterButtonStyle(key === filter)}
-            >
-              {getNotiFilterValue(key as NotiFilter)}
-            </Button>
-          ))}
-        </FilterButtonGroup>
-      </AppBar>
-
-      <Box sx={{ mt: 17 }}>
+      <Box>
         <Stack spacing={2} sx={{ py: 2 }}>
           {isLoading ? (
             <Typography>Loading...</Typography>
@@ -212,6 +197,6 @@ export default function AlarmHistoryPage() {
           />
         </Stack>
       </Box>
-    </>
+    </LayoutWithPrev>
   );
 }

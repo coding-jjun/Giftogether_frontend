@@ -27,7 +27,7 @@ export default function FundingThumbnail({ funding }: Props) {
           <CoverImage
             src={img ?? "/dummy/present.webp"}
             alt={`thumbnail-${fundTitle}`}
-            parentDivStyle={{ height: "30vh" }}
+            parentDivStyle={{ height: "30vh", borderRadius: 0 }}
           />
         </SwiperSlide>
       ))}
