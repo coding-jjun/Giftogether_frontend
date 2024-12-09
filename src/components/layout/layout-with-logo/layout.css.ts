@@ -12,11 +12,9 @@ export const header = style({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "10px 18px 10px 12px",
-  boxSizing: "border-box",
-  backgroundColor: "white",
+  padding: "12px 18px 10px 12px",
+  backdropFilter: "blur(10px)",
   zIndex: 999,
-  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.03)",
 });
 
 export const logo = style({

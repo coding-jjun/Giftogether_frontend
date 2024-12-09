@@ -10,8 +10,7 @@ export const header = style({
   justifyContent: "space-between",
   alignItems: "center",
   padding: "10px 18px 10px 12px",
-  boxSizing: "border-box",
-  backgroundColor: "white",
+  backdropFilter: "blur(10px)",
   zIndex: 999,
 });
 
