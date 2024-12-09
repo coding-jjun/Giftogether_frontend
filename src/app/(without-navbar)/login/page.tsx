@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Container, Link, Typography } from "@mui/material";
 import { styled } from "@mui/system";
@@ -42,7 +42,14 @@ const LOGIN_PROVIDERS: LoginButtonProps[] = [
 ];
 
 const Login = () => {
-  const router = useRouter();
+  // 스크롤 방지
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   return (
     <LayoutWithPrev>
