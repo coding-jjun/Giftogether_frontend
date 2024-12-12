@@ -1,4 +1,5 @@
 import { style } from "@vanilla-extract/css";
+import theme from "@/components/theme";
 
 export const container = style({
   padding: "16px",
@@ -13,6 +14,7 @@ export const header = style({
   justifyContent: "space-between",
   alignItems: "center",
   padding: "12px 18px 10px 12px",
+  background: "rgba(255, 255, 255, 0.9)",
   backdropFilter: "blur(10px)",
   zIndex: 999,
 });
@@ -65,5 +67,5 @@ export const icon = style({
 export const notiIcon = style([icon, { fill: "#424242" }]);
 
 export const activeIcon = style({
-  fill: "#e57373",
+  fill: theme.palette.primary.main,
 });

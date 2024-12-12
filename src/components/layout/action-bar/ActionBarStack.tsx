@@ -7,5 +7,4 @@ export const ActionBarStack = styled(Stack)(() => ({
   left: 0,
   right: 0,
   padding: 15,
-  backdropFilter: "blur(10px)",
 }));
