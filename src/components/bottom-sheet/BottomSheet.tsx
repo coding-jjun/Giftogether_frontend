@@ -1,7 +1,7 @@
-import * as S from "@/components/bottomSheet/BottomSheetStyle";
-import Header from "@/components/bottomSheet/Header";
+import * as S from "@/components/bottom-sheet/BottomSheetStyle";
+import Header from "@/components/bottom-sheet/Header";
 import { AnimationControls, PanInfo } from "framer-motion";
-import { Overlay } from "@/components/bottomSheet/BottomSheetStyle";
+import { Overlay } from "@/components/bottom-sheet/BottomSheetStyle";
 import { useEffect } from "react";
 
 interface Props {

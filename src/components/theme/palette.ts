@@ -1,9 +1,9 @@
 import { PaletteOptions } from "@mui/material";
-import { grey, red } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 
 const palette: PaletteOptions = {
   primary: {
-    main: red[300],
+    main: "#F43C6B",
     contrastText: "#FFFFFF",
   },
   secondary: {

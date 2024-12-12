@@ -68,8 +68,9 @@ export default function FundingDetailPage({
         isWriter ? null : (
           <DetailActionBar
             buttonText="선물하기"
-            // TODO: 후원 페이지 추가 필요
-            handleSubmit={() => router.push(``)}
+            handleSubmit={() =>
+              router.push(`/fundings/${params.fundId}/donate`)
+            }
           />
         )
       }

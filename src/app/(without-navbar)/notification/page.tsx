@@ -21,7 +21,7 @@ import {
 } from "@/types/Notification.enum";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import NotificationWrapper from "@/app/(without-navbar)/notification/view/NotificationWrapper";
-import EmptyState from "@/components/emptyState/EmptyState";
+import EmptyState from "@/components/empty-state/EmptyState";
 import useReadNotification from "@/query/useReadNotification";
 import LayoutWithPrev from "@/components/layout/layout-with-prev";
 
