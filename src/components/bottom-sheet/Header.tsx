@@ -1,4 +1,4 @@
-import * as S from "@/components/bottomSheet/BottomSheetStyle";
+import * as S from "@/components/bottom-sheet/BottomSheetStyle";
 
 export default function Header() {
   return (
