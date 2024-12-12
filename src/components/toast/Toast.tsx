@@ -22,12 +22,12 @@ const slideUp = keyframes`
 const ToastContainer = styled.div`
   position: fixed;
   width: 75vw;
-  background-color: #333;
+  background-color: rgba(97, 90, 90, 0.6);
+  backdrop-filter: blur(5px);
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 20px;
+  border-radius: 30px;
   animation: ${slideUp} 0.5s ease-out forwards;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
 `;
 
