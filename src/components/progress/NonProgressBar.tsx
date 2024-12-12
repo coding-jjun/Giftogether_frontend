@@ -44,12 +44,7 @@ export default function ProgressBarWithText({
           </Typography>
           {getDeadlineStatus(endDate) !== "만료됨" &&
             getDeadlineStatus(endDate) !== "오늘 마감" && (
-              <Typography
-                variant={"body2"}
-                fontWeight={500}
-                color={grey[700]}
-                // sx={{ mr: "3px" }}
-              >
+              <Typography variant={"body2"} fontWeight={500} color={grey[700]}>
                 일 남음
               </Typography>
             )}

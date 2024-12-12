@@ -10,8 +10,8 @@ export const header = style({
   justifyContent: "space-between",
   alignItems: "center",
   padding: "10px 18px 10px 12px",
-  boxSizing: "border-box",
-  backgroundColor: "white",
+  backdropFilter: "blur(10px)",
+  background: "rgba(255, 255, 255, 0.9)",
   zIndex: 999,
 });
 
@@ -35,7 +35,7 @@ export const icon = style({
 export const titleSpan = style({
   fontSize: "18px",
   lineHeight: "22px",
-  fontWeight: 700,
+  fontWeight: 500,
   color: "#424242",
   position: "absolute",
   left: "50%",
@@ -56,8 +56,9 @@ export const footer = style({
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
-  backgroundColor: "#fff",
-  borderTop: "1px solid #eeeeee",
   zIndex: 1000,
-  height: "65px",
+  height: "70px",
+  backdropFilter: "blur(10px)",
+  background:
+    "linear-gradient(to top, rgba(255, 255, 255), rgba(255, 255, 255, 0.7))",
 });
