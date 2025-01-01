@@ -17,9 +17,11 @@ export default function DetailActionBar({ buttonText, handleSubmit }: Props) {
       justifyContent={"space-between"}
       spacing={1}
     >
-      <IconButton aria-label="share">
-        <ShareOutlinedIcon />
-      </IconButton>
+      {buttonText === "선물하기" ? (
+        <IconButton aria-label="share">
+          <ShareOutlinedIcon />
+        </IconButton>
+      ) : null}
       <ActionBarButton variant="contained" onClick={handleSubmit}>
         {buttonText}
       </ActionBarButton>

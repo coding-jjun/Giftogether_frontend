@@ -6,10 +6,5 @@ export const ActionBarStack = styled(Stack)(() => ({
   bottom: 0,
   left: 0,
   right: 0,
-  boxSizing: "border-box",
-  height: 65,
-  padding: 10,
-  borderTop: "1px solid #eeeeee",
-  backgroundColor: "white",
-  zIndex: 99,
+  padding: 15,
 }));
