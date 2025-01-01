@@ -1,4 +1,5 @@
 import { style } from "@vanilla-extract/css";
+import theme from "@/components/theme";
 
 export const container = style({
   padding: "16px",
@@ -12,11 +13,10 @@ export const header = style({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "10px 18px 10px 12px",
-  boxSizing: "border-box",
-  backgroundColor: "white",
+  padding: "12px 18px 10px 12px",
+  background: "rgba(255, 255, 255, 0.9)",
+  backdropFilter: "blur(10px)",
   zIndex: 999,
-  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.03)",
 });
 
 export const logo = style({
@@ -67,5 +67,5 @@ export const icon = style({
 export const notiIcon = style([icon, { fill: "#424242" }]);
 
 export const activeIcon = style({
-  fill: "#e57373",
+  fill: theme.palette.primary.main,
 });
