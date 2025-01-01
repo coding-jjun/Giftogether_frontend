@@ -5,12 +5,12 @@ import {
   useInfiniteQuery,
   UseInfiniteQueryResult,
 } from "@tanstack/react-query";
-import axios from "axios";
 import { CommonResponse } from "@/types/CommonResponse";
 import {
   NotificationQueryParam,
   NotificationResponse,
 } from "@/types/Notification";
+import axiosInstance from "@/utils/axios";
 
 // 쿼리 스트링
 const buildURL = (params: Partial<NotificationQueryParam>): string => {
@@ -34,7 +34,8 @@ const fetchNotifications = async (
   queryParams: Partial<NotificationQueryParam>,
 ): Promise<NotificationResponse> => {
   const url = buildURL(queryParams);
-  const response = await axios.get<CommonResponse<NotificationResponse>>(url);
+  const response =
+    await axiosInstance.get<CommonResponse<NotificationResponse>>(url);
   return response.data.data;
 };
 

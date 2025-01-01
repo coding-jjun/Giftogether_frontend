@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { CommonResponse } from "@/types/CommonResponse";
 import { Account, CreateAccountDto } from "@/types/Account";
+import axiosInstance from "@/utils/axios";
 
 const addAccount = async (dto: CreateAccountDto): Promise<number> => {
-  const { data } = await axios.post<CommonResponse<Account>>(
+  const { data } = await axiosInstance.post<CommonResponse<Account>>(
     "/api/account",
     dto,
   );

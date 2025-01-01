@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GetCommentDto } from "@/types/Comment";
 import { CommonResponse } from "@/types/CommonResponse";
+import axiosInstance from "@/utils/axios";
 
 const deleteComment = async (
   comId: number,
@@ -11,7 +11,7 @@ const deleteComment = async (
     throw new Error("fundUuid가 유효하지 않습니다.");
   }
 
-  const { data } = await axios.delete(
+  const { data } = await axiosInstance.delete(
     `/api/comment/${fundUuid}?comId=${comId}`,
   );
   return data;

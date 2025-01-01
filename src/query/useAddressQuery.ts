@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { AddressDto } from "@/types/Address";
 import { CommonResponse } from "@/types/CommonResponse";
+import axiosInstance from "@/utils/axios";
 
 const fetchAddress = async (addrId: number): Promise<AddressDto> => {
-  const response = await axios.get<CommonResponse<AddressDto>>(
+  const response = await axiosInstance.get<CommonResponse<AddressDto>>(
     `/api/address/${addrId}`,
   );
 

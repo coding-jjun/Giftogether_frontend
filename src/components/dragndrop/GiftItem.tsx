@@ -3,9 +3,9 @@ import { Box, Card, CardContent, IconButton, TextField } from "@mui/material";
 import { FieldErrors, useFormContext, useWatch } from "react-hook-form";
 import GiftDto from "@/types/GiftDto";
 import DragHandler from "@/components/dragndrop/DragHandler";
-import axios from "axios";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import axiosInstance from "@/utils/axios";
 
 interface GiftItemProps {
   id: number;
@@ -60,7 +60,7 @@ export default function GiftItem({
     if (giftUrl) {
       const fetchMetadata = async () => {
         try {
-          const response = await axios.post<MetadataResponse>(
+          const response = await axiosInstance.post<MetadataResponse>(
             "/server/metadata",
             {
               url: giftUrl,

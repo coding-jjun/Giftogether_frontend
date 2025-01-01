@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { CommonResponse } from "@/types/CommonResponse";
+import axiosInstance from "@/utils/axios";
 
 interface UploadResponse {
   urls: string[];
@@ -13,7 +13,7 @@ const useImageUpload = () => {
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
 
-    const response = await axios.post<CommonResponse<UploadResponse>>(
+    const response = await axiosInstance.post<CommonResponse<UploadResponse>>(
       "/api/image",
       formData,
       {

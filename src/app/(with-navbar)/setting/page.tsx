@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import { grey } from "@mui/material/colors";
 import { Avatar, Link, Stack, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -7,18 +6,11 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import LogoutIcon from "@mui/icons-material/Logout";
 import useCurrentUserQuery from "@/query/useCurrentUserQuery";
-import axios from "axios";
-import { getCookieValue } from "@/hook/useCookie";
+import { logout } from "@/app/(with-navbar)/setting/action";
 
 export default function SettingPage() {
   // TODO: 현재 로그인된 유저 조회 실패 시 로직 처리 필요
   const { data: user } = useCurrentUserQuery();
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    const token = getCookieValue("refreshToken");
-    setRefreshToken(token);
-  }, []);
 
   return (
     <Stack direction="column" sx={{ marginTop: "20px" }}>
@@ -81,11 +73,7 @@ export default function SettingPage() {
         justifyContent="space-between"
         alignItems="center"
         sx={{ p: "20px", borderBottom: "1px solid #e2e2e2" }}
-        onClick={() =>
-          axios.post("/api/auth/logout", {
-            refreshToken: refreshToken,
-          })
-        }
+        onClick={() => logout()}
       >
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <LogoutIcon sx={{ color: grey[500], fontSize: "26px" }} />

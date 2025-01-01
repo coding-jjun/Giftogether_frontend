@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { CommonResponse } from "@/types/CommonResponse";
 import { FriendQueryDto } from "@/types/Friend";
+import axiosInstance from "@/utils/axios";
 
 interface QueryResponse {
   result?: FriendQueryDto[];
@@ -9,7 +9,7 @@ interface QueryResponse {
 }
 
 const fetchFriends = async (userId: number): Promise<QueryResponse> => {
-  const { data } = await axios.get<CommonResponse<QueryResponse>>(
+  const { data } = await axiosInstance.get<CommonResponse<QueryResponse>>(
     `/api/friend/${userId}`,
   );
   return data.data;

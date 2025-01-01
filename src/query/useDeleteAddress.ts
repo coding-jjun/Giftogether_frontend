@@ -1,12 +1,12 @@
 import { CommonResponse } from "@/types/CommonResponse";
 import { AddressDto } from "@/types/Address";
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axiosInstance from "@/utils/axios";
 
 const deleteAddress = async (
   addrId: number,
 ): Promise<CommonResponse<AddressDto>> => {
-  const { data } = await axios.delete(`/api/address/${addrId}`, {
+  const { data } = await axiosInstance.delete(`/api/address/${addrId}`, {
     withCredentials: true, // 요청에 쿠키 포함
   });
 

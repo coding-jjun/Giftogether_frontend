@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/toast";
 import { ErrorData } from "@/types/ErrorData";
 import LayoutWithPrev from "@/components/layout/layout-with-prev";
+import axiosInstance from "@/utils/axios";
 
 const Container = styled(Box)({
   display: "flex",
@@ -81,7 +82,7 @@ const LoginComponent = () => {
 
   const handleClickLogin = async () => {
     try {
-      const response = await axios.post(`/api/auth/login`, {
+      const response = await axiosInstance.post(`/server/login`, {
         userEmail: email,
         userPw: password,
       });
