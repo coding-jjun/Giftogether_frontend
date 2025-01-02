@@ -8,18 +8,16 @@ interface QueryResponse {
   total?: number;
 }
 
-const fetchFriends = async (userId: number): Promise<QueryResponse> => {
-  const { data } = await axios.get<CommonResponse<QueryResponse>>(
-    `/api/friend/${userId}`,
-  );
+const fetchFriends = async (): Promise<QueryResponse> => {
+  const { data } =
+    await axios.get<CommonResponse<QueryResponse>>(`/api/friend`);
   return data.data;
 };
 
-const useFriendsQuery = (userId: number): UseQueryResult<QueryResponse> => {
+const useFriendsQuery = (): UseQueryResult<QueryResponse> => {
   return useQuery<QueryResponse>({
-    queryKey: ["friends", userId],
-    queryFn: () => fetchFriends(userId),
-    enabled: userId !== undefined,
+    queryKey: ["friends"],
+    queryFn: () => fetchFriends(),
   });
 };
 

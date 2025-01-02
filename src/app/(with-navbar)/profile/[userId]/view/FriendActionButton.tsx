@@ -16,7 +16,7 @@ export default function FriendActionButton({
   friendId,
 }: Props) {
   const router = useRouter();
-  const { data: friendStatus } = useFriendStatusQuery(friendId);
+  const { data: friendStatus } = useFriendStatusQuery(userId, friendId);
   const { mutate: requestFriend } = useAddFriend(friendId);
   const { mutate: deleteFriend } = useDeleteFriend(friendId);
 
