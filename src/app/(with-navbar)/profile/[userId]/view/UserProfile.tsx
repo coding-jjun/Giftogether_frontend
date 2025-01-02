@@ -7,7 +7,7 @@ import MyProfileImage from "./MyProfileImage";
 
 interface Props {
   user: User | UserDto;
-  userId: number | undefined;
+  userId?: number;
   friendId: number;
 }
 
@@ -15,16 +15,18 @@ export default function UserProfile({ user, userId, friendId }: Props) {
   return (
     <UserProfileContainer direction="row" spacing={3}>
       <UserInfoContainer direction="column" spacing={2}>
-        <Box>
-          <UserName variant="h6">{user?.userNick ?? "sample_id"}</UserName>
-          <FriendCount userId={friendId} />
-        </Box>
         {userId && (
-          <FriendActionButton
-            userId={userId}
-            userNick={user?.userNick}
-            friendId={friendId}
-          />
+          <>
+            <Box>
+              <UserName variant="h6">{user?.userNick ?? "sample_id"}</UserName>
+              <FriendCount userId={userId} />
+            </Box>
+            <FriendActionButton
+              userId={userId}
+              userNick={user?.userNick}
+              friendId={friendId}
+            />
+          </>
         )}
       </UserInfoContainer>
       <MyProfileImage user={user} />
