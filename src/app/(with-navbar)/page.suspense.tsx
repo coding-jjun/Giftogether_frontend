@@ -13,19 +13,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { HorizontalImgCard, VerticalImgCard } from "@/components/card";
 import calculatePercent from "@/utils/calculatePercent";
 import styled from "@emotion/styled";
-import { getCookieValue } from "@/hook/useCookie";
-import { useEffect, useState } from "react";
 import PullToRefresh from "@/components/refresh/PullToRefresh";
+import Cookies from "js-cookie";
 
 export default function MainPageContent() {
   const router = useRouter();
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  useEffect(() => {
-    const cookieValue = getCookieValue("isLoggedIn");
-    setIsLoggedIn(cookieValue === "true");
-  }, []);
+  const session = Cookies.get("session");
 
   // 나의 펀딩
   const { data: myFundingQueryResponse, refetch: refetchMyFundings } =
@@ -57,8 +51,7 @@ export default function MainPageContent() {
           }
           barSx={{ paddingBottom: "5px" }}
         />
-        {!isLoggedIn ||
-        !myFundingQueryResponse.pages.at(0)?.fundings?.length ? (
+        {!session || !myFundingQueryResponse.pages.at(0)?.fundings?.length ? (
           <BoxButton
             handleClick={() => router.push("/fundings/creation")}
             content={

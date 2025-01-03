@@ -6,6 +6,7 @@ import { CommonResponse } from "@/types/CommonResponse";
 import { CreateUserForm } from "@/types/User";
 import { ErrorData } from "@/types/ErrorData";
 import { InputLabel } from "@/app/(without-navbar)/signup/view/input/InputLabel";
+import axiosInstance from "@/utils/axios";
 
 const validatePhoneNumberFormat = (phoneNumber: string): boolean => {
   const regex = /^010-\d{4}-\d{4}$/;
@@ -29,7 +30,7 @@ const validate = async (
   }
 
   try {
-    const { data } = await axios.post<CommonResponse<Boolean>>(
+    const { data } = await axiosInstance.post<CommonResponse<Boolean>>(
       `/api/auth/phone`,
       {
         userPhone: phoneNumber,

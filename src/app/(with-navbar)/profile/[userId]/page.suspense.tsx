@@ -6,21 +6,14 @@ import useFundingsQuery from "@/query/useFundingsQuery";
 import UserProfile from "./view/UserProfile";
 import { FundingList } from "./view/FundingList";
 import useCurrentUserQuery from "@/query/useCurrentUserQuery";
-import { useCookie } from "@/hook/useCookie";
 import useUserQuery from "@/query/useUserQuery";
-import { useRouter } from "next/navigation";
 
-interface Params {
-  params: {
-    userId: string;
-  };
+interface Props {
+  myId: number | null;
+  friendId: number;
 }
 
-export default function MyPageContent({ params }: Params) {
-  const router = useRouter();
-  const myId = useCookie<number>("userId");
-  const friendId = Number(params.userId);
-
+export default function MyPageContent({ myId, friendId }: Props) {
   const [tab, setTab] = useState<FundingStatusValue>("진행 중");
 
   const { data: loginUser } = useCurrentUserQuery();
@@ -75,7 +68,11 @@ export default function MyPageContent({ params }: Params) {
 
   return (
     <>
-      <UserProfile user={profileUser} userId={myId} friendId={friendId} />
+      <UserProfile
+        user={profileUser}
+        userId={myId || undefined}
+        friendId={friendId}
+      />
       <StickyTabs
         tabs={[
           {

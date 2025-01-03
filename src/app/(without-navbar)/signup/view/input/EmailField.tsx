@@ -7,6 +7,7 @@ import { GreyTextField } from "@/components/textfield";
 import { CreateUserForm } from "@/types/User";
 import { ErrorData } from "@/types/ErrorData";
 import { InputLabel } from "@/app/(without-navbar)/signup/view/input/InputLabel";
+import axiosInstance from "@/utils/axios";
 
 const EmailField = () => {
   const {
@@ -24,7 +25,7 @@ const EmailField = () => {
     }
 
     try {
-      const { data } = await axios.post<CommonResponse<Boolean>>(
+      const { data } = await axiosInstance.post<CommonResponse<Boolean>>(
         `/api/auth/email`,
         {
           userEmail: email,

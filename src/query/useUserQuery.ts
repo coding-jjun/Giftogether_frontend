@@ -1,10 +1,12 @@
-import axios from "axios";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { CommonResponse } from "@/types/CommonResponse";
 import { User } from "@/types/User";
+import axiosInstance from "@/utils/axios";
 
 const fetchUser = async (userId: number): Promise<User> => {
-  const response = await axios.get<CommonResponse<User>>(`/api/user/${userId}`);
+  const response = await axiosInstance.get<CommonResponse<User>>(
+    `/api/user/${userId}`,
+  );
   return response.data.data;
 };
 

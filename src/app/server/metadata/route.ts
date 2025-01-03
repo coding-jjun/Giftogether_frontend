@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { JSDOM } from "jsdom";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 
 export async function POST(request: NextRequest) {
   const { url } = await request.json();
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 최초 HEAD 요청으로 리다이렉트 여부 확인
-        const response = await axios.head(initialUrl, {
+        const response = await axiosInstance.head(initialUrl, {
           maxRedirects: 0, // 리다이렉트 발생 시 catch로 이동
           validateStatus: (status) =>
             (status >= 200 && status < 400) || (status >= 300 && status < 400),
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
           axiosError.response.status >= 300 &&
           axiosError.response.status < 400
         ) {
-          const redirectResponse = await axios.get(initialUrl, {
+          const redirectResponse = await axiosInstance.get(initialUrl, {
             maxRedirects: 10, // 리다이렉트 최대 10회까지 추적
             validateStatus: (status) => status >= 200 && status < 400,
           });

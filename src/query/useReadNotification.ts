@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { CommonResponse } from "@/types/CommonResponse";
 import { NotificationResponse } from "@/types/Notification";
+import axiosInstance from "@/utils/axios";
 
 const readNotification = async (
   lastTime: Date | undefined,
 ): Promise<NotificationResponse> => {
-  const response = await axios.patch<CommonResponse<NotificationResponse>>(
-    "/api/notification/read",
-    { lastTime: lastTime?.toISOString() },
-  );
+  const response = await axiosInstance.patch<
+    CommonResponse<NotificationResponse>
+  >("/api/notification/read", { lastTime: lastTime?.toISOString() });
   return response.data.data;
 };
 

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
+import { decrypt } from "@/utils/auth/session";
+import { cookies } from "next/headers";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   if (!request.cookies.has("viewport")) {
@@ -10,45 +12,17 @@ export function middleware(request: NextRequest) {
     response.headers.set("viewport", viewport);
   }
 
-  const accessToken = request.cookies.get("access_token");
-  const refreshToken = request.cookies.get("refresh_token");
-  const userCookie = request.cookies.get("user");
+  const cookieSession = (await cookies()).get("session")?.value;
+  const session = await decrypt(cookieSession);
 
-  const userId = getUserIdFromCookie(userCookie?.value);
-  if (userId) {
-    response.cookies.set("userId", userId.toString());
-  }
+  const isAuthorized =
+    session && session.exp && session?.exp * 1000 > new Date().getTime();
 
-  if (refreshToken) {
-    response.cookies.set("refreshToken", refreshToken.value);
-  }
-
-  if (!accessToken && shouldCheckAuth(request)) {
+  if (!isAuthorized && shouldCheckAuth(request)) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (accessToken) {
-    response.cookies.set("isLoggedIn", "true");
-  }
-
   return response;
-}
-
-function getUserIdFromCookie(
-  userCookie: string | undefined,
-): number | undefined {
-  if (!userCookie) return undefined;
-
-  try {
-    const userValue = userCookie.startsWith("j:")
-      ? userCookie.slice(2)
-      : userCookie;
-    const userObj = JSON.parse(userValue);
-    return userObj.userId;
-  } catch (error) {
-    console.error("Failed to parse user cookie", error);
-    return undefined;
-  }
 }
 
 function shouldCheckAuth(request: NextRequest): boolean {

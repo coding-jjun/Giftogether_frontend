@@ -2,12 +2,12 @@ import React, { useCallback, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import debounce from "lodash/debounce";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { CreateUserForm, UserDto } from "@/types/User";
+import { CreateUserForm } from "@/types/User";
 import { GreyTextField } from "@/components/textfield";
 import { CommonResponse } from "@/types/CommonResponse";
 import { ErrorData } from "@/types/ErrorData";
-import { useCookie } from "@/hook/useCookie";
 import { InputLabel } from "@/app/(without-navbar)/signup/view/input/InputLabel";
+import axiosInstance from "@/utils/axios";
 
 const validateNickname = async (nickname: string | undefined) => {
   if (!nickname) {
@@ -15,7 +15,7 @@ const validateNickname = async (nickname: string | undefined) => {
   }
 
   try {
-    const { data } = await axios.post<CommonResponse<Boolean>>(
+    const { data } = await axiosInstance.post<CommonResponse<Boolean>>(
       `/api/auth/nickname`,
       { userNick: nickname },
     );
@@ -50,8 +50,6 @@ const NicknameField = ({ myNickname }: Props) => {
 
   const userNick = useWatch({ control, name: "userNick" });
 
-  const cookieUser = useCookie<UserDto>("user");
-
   const debouncedValidate = useCallback(
     debounce(async (value: string) => {
       const validationResult = await validateNickname(value);
@@ -74,7 +72,7 @@ const NicknameField = ({ myNickname }: Props) => {
     return () => {
       debouncedValidate.cancel();
     };
-  }, [userNick, debouncedValidate, cookieUser, clearErrors]);
+  }, [userNick, debouncedValidate, clearErrors]);
 
   return (
     <div>

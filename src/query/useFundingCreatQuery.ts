@@ -1,12 +1,12 @@
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Funding, FundingForm } from "@/types/Funding";
 import { CommonResponse } from "@/types/CommonResponse";
+import axiosInstance from "@/utils/axios";
 
 const fetchFundingCreate = async (
   body: FundingForm,
 ): Promise<CommonResponse<Funding>> => {
-  const { data } = await axios.post<CommonResponse<Funding>>(
+  const { data } = await axiosInstance.post<CommonResponse<Funding>>(
     `/api/funding`,
     body,
   );

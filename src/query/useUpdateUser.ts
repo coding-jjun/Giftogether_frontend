@@ -1,12 +1,12 @@
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CommonResponse } from "@/types/CommonResponse";
 import { UpdateUserDto, UserDto } from "@/types/User";
+import axiosInstance from "@/utils/axios";
 
 const updateUser = async (
   dto: UpdateUserDto,
 ): Promise<CommonResponse<UserDto> | null> => {
-  const { data } = await axios.put(`/api/user`, dto);
+  const { data } = await axiosInstance.put(`/api/user`, dto);
   return data;
 };
 

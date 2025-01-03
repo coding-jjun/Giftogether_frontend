@@ -2,6 +2,7 @@ import axios from "axios";
 import { CommonResponse } from "@/types/CommonResponse";
 import { FundingDto } from "@/types/Funding";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axiosInstance from "@/utils/axios";
 
 const deleteFunding = async (
   fundUuid: string | undefined,
@@ -10,7 +11,7 @@ const deleteFunding = async (
     throw new Error("유효하지 않은 fundUuid 입니다.");
   }
 
-  const { data } = await axios.delete(`/api/funding/${fundUuid}`);
+  const { data } = await axiosInstance.delete(`/api/funding/${fundUuid}`);
   return data;
 };
 

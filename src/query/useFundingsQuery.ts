@@ -8,18 +8,20 @@ import {
 } from "@tanstack/react-query";
 import { FundingQueryParam, FundingQueryResponse } from "@/types/Funding";
 import { CommonResponse } from "@/types/CommonResponse";
+import { getUserId } from "@/utils/auth/session";
 import Cookies from "js-cookie";
+import axiosInstance from "@/utils/axios";
 
 const buildURL = (
-  userId: number,
   params: Partial<FundingQueryParam>,
+  userId?: number,
   isFallback: boolean = false,
 ): string => {
-  const isLoggedIn = Cookies.get("isLoggedIn");
+  const isLoggedIn = Cookies.get("session");
 
   let baseUrl;
 
-  if (isFallback || isLoggedIn !== "true" || userId === undefined) {
+  if (isFallback || !isLoggedIn || userId === undefined) {
     baseUrl = `/api/funding`;
   } else {
     baseUrl = `/api/user/${userId}/funding`;
@@ -43,18 +45,25 @@ const buildURL = (
 };
 
 const fetchFundings = async (
-  userId: number,
   queryParams: Partial<FundingQueryParam>,
+  userId?: number,
 ): Promise<FundingQueryResponse> => {
+  if (!userId) {
+    userId = (await getUserId()) || undefined;
+  }
+
   try {
-    const url = buildURL(userId, queryParams);
-    const response = await axios.get<CommonResponse<FundingQueryResponse>>(url);
+    const url = buildURL(queryParams, userId);
+    const response =
+      await axiosInstance.get<CommonResponse<FundingQueryResponse>>(url);
     return response.data.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      const fallbackUrl = buildURL(userId, queryParams, true);
+      const fallbackUrl = buildURL(queryParams, userId, true);
       const fallbackResponse =
-        await axios.get<CommonResponse<FundingQueryResponse>>(fallbackUrl);
+        await axiosInstance.get<CommonResponse<FundingQueryResponse>>(
+          fallbackUrl,
+        );
       return fallbackResponse.data.data;
     }
     throw error;
@@ -81,15 +90,16 @@ const useFundingsQuery = (
     queryFn: ({
       pageParam = { lastFundUuid: undefined, lastEndAt: undefined },
     }) =>
-      fetchFundings(userId ?? Number(Cookies.get("userId")), {
-        ...queryParams,
-        lastFundUuid: pageParam.lastFundUuid,
-        lastEndAt: pageParam.lastEndAt,
-      }),
+      fetchFundings(
+        {
+          ...queryParams,
+          lastFundUuid: pageParam.lastFundUuid,
+          lastEndAt: pageParam.lastEndAt,
+        },
+        userId,
+      ),
     initialPageParam: { lastFundUuid: undefined, lastEndAt: undefined },
     getNextPageParam: (lastPage) => {
-      console.log("lastPage Count: ", lastPage, "limit: ", queryParams?.limit);
-
       if (lastPage.count < (queryParams?.limit ?? 1)) {
         return undefined;
       }

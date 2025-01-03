@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   DefaultError,
   InfiniteData,
@@ -8,14 +7,15 @@ import {
 } from "@tanstack/react-query";
 import { CommonResponse } from "@/types/CommonResponse";
 import { MyDonationListDto } from "@/types/Donation";
+import axiosInstance from "@/utils/axios";
 
 const fetchMyDonations = async (
   status?: string,
   lastId?: number,
 ): Promise<MyDonationsQueryResponse> => {
-  const response = await axios.get<CommonResponse<MyDonationsQueryResponse>>(
-    `/api/user/donation?status=${status}&lastId=${lastId}`,
-  );
+  const response = await axiosInstance.get<
+    CommonResponse<MyDonationsQueryResponse>
+  >(`/api/user/donation?status=${status}&lastId=${lastId}`);
 
   return response.data.data;
 };

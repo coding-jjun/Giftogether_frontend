@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { CommonResponse } from "@/types/CommonResponse";
 import { CreateUserDto } from "@/types/User";
+import axiosInstance from "@/utils/axios";
 
 interface ResponseData {
   message: string;
@@ -11,7 +11,7 @@ interface ResponseData {
 const addUser = async (
   dto: CreateUserDto,
 ): Promise<CommonResponse<ResponseData>> => {
-  const { data } = await axios.post<CommonResponse<ResponseData>>(
+  const { data } = await axiosInstance.post<CommonResponse<ResponseData>>(
     "/api/auth/signup",
     dto,
   );

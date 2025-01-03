@@ -1,13 +1,13 @@
 import { AddressDto, UpdateAddressDto } from "@/types/Address";
 import { CommonResponse } from "@/types/CommonResponse";
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axiosInstance from "@/utils/axios";
 
 const updateAddress = async (
   addrId: number,
   dto: UpdateAddressDto,
 ): Promise<CommonResponse<AddressDto>> => {
-  const { data } = await axios.put(`/api/address/${addrId}`, dto);
+  const { data } = await axiosInstance.put(`/api/address/${addrId}`, dto);
   return data;
 };
 
