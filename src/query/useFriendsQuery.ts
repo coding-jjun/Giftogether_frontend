@@ -1,25 +1,23 @@
+import axios from "axios";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { CommonResponse } from "@/types/CommonResponse";
 import { FriendQueryDto } from "@/types/Friend";
-import axiosInstance from "@/utils/axios";
 
 interface QueryResponse {
   result?: FriendQueryDto[];
   total?: number;
 }
 
-const fetchFriends = async (userId: number): Promise<QueryResponse> => {
-  const { data } = await axiosInstance.get<CommonResponse<QueryResponse>>(
-    `/api/friend/${userId}`,
-  );
+const fetchFriends = async (): Promise<QueryResponse> => {
+  const { data } =
+    await axios.get<CommonResponse<QueryResponse>>(`/api/friend`);
   return data.data;
 };
 
-const useFriendsQuery = (userId: number): UseQueryResult<QueryResponse> => {
+const useFriendsQuery = (): UseQueryResult<QueryResponse> => {
   return useQuery<QueryResponse>({
-    queryKey: ["friends", userId],
-    queryFn: () => fetchFriends(userId),
-    enabled: userId !== undefined,
+    queryKey: ["friends"],
+    queryFn: () => fetchFriends(),
   });
 };
 
