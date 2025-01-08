@@ -17,7 +17,7 @@ const buildURL = (
   userId?: number,
   isFallback: boolean = false,
 ): string => {
-  const isLoggedIn = Cookies.get("session");
+  const isLoggedIn = Cookies.get("access_token");
 
   let baseUrl;
 

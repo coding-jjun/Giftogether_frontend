@@ -19,7 +19,7 @@ import Cookies from "js-cookie";
 export default function MainPageContent() {
   const router = useRouter();
 
-  const session = Cookies.get("session");
+  const session = Cookies.get("access_token");
 
   // 나의 펀딩
   const { data: myFundingQueryResponse, refetch: refetchMyFundings } =

@@ -40,7 +40,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     const expires = new Date(tokenPayload.exp * 1000);
 
     // 쿠키 설정
-    res.cookies.set("session", accessToken, { ...cookieOptions, expires });
+    res.cookies.set("access_token", accessToken, {
+      ...cookieOptions,
+      httpOnly: process.env.NODE_ENV === "production",
+      secure: false,
+      expires,
+    });
     res.cookies.set("refreshToken", refreshToken, cookieOptions);
     res.cookies.set("userId", tokenPayload.sub, { ...cookieOptions, expires });
 

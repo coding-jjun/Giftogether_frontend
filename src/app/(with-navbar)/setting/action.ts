@@ -14,7 +14,7 @@ export async function logout() {
     });
 
     if (data?.data) {
-      cookieStore.delete("session");
+      cookieStore.delete("access_token");
       cookieStore.delete("refreshToken");
       cookieStore.delete("userId");
       cookieStore.delete("nickname");
