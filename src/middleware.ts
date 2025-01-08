@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set("viewport", viewport);
   }
 
-  const cookieSession = (await cookies()).get("session")?.value;
+  const cookieSession = (await cookies()).get("access_token")?.value;
   const session = await decrypt(cookieSession);
 
   const isAuthorized =

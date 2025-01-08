@@ -18,7 +18,7 @@ export async function decrypt(session: string | undefined = "") {
 }
 
 export async function getUserId() {
-  const cookie = (await cookies()).get("session")?.value;
+  const cookie = (await cookies()).get("access_token")?.value;
   if (!cookie) {
     return null;
   }

@@ -14,7 +14,7 @@ const refreshToken = async () => {
     );
     const { accessToken } = response.data;
 
-    Cookies.set("session", accessToken);
+    Cookies.set("access_token", accessToken);
     return accessToken;
   } catch (error) {
     console.error("토큰 재발급 실패:", error);
