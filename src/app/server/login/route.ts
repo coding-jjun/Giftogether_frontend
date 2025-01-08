@@ -42,8 +42,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     // 쿠키 설정
     res.cookies.set("access_token", accessToken, {
       ...cookieOptions,
-      httpOnly: process.env.NODE_ENV === "production",
-      secure: false,
+      httpOnly: false,
       expires,
     });
     res.cookies.set("refreshToken", refreshToken, cookieOptions);
