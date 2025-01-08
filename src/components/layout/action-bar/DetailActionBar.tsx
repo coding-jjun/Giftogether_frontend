@@ -6,10 +6,15 @@ import { ActionBarButton } from "@/components/layout/action-bar/ActionBarButton"
 
 interface Props {
   buttonText: string;
+  handleShare?: () => void;
   handleSubmit?: () => void;
 }
 
-export default function DetailActionBar({ buttonText, handleSubmit }: Props) {
+export default function DetailActionBar({
+  buttonText,
+  handleShare,
+  handleSubmit,
+}: Props) {
   return (
     <ActionBarStack
       direction={"row"}
@@ -18,7 +23,7 @@ export default function DetailActionBar({ buttonText, handleSubmit }: Props) {
       spacing={1}
     >
       {buttonText === "선물하기" ? (
-        <IconButton aria-label="share">
+        <IconButton aria-label="share" onClick={handleShare}>
           <ShareOutlinedIcon />
         </IconButton>
       ) : null}

@@ -15,6 +15,7 @@ import useDeleteFunding from "@/query/useDeleteFunding";
 import FundUserNick from "@/app/(without-navbar)/fundings/[fundId]/view/FundUserNick";
 import PullToRefresh from "@/components/refresh/PullToRefresh";
 import LayoutWithPrev from "@/components/layout/layout-with-prev";
+import { useToast } from "@/components/toast";
 
 export default function FundingDetailPage({
   params,
@@ -22,6 +23,7 @@ export default function FundingDetailPage({
   params: { fundId: string };
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { addToast } = useToast();
 
   const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
@@ -57,6 +59,42 @@ export default function FundingDetailPage({
     router.push(`/profile/${loginUserId}`);
   };
 
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/fundings/${params.fundId}`;
+
+    const fallbackCopyToClipboard = (text: string) => {
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        addToast("URL이 복사되었습니다.");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const shareData: ShareData = {
+      title: "기프투게더",
+      text: funding?.fundTitle || "",
+      url: shareUrl,
+    };
+
+    if (navigator.canShare(shareData)) {
+      await navigator.share(shareData);
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(shareUrl)
+        .then(() => addToast("URL이 복사되었습니다."));
+    } else {
+      fallbackCopyToClipboard(shareUrl);
+    }
+  };
+
   if (!funding) {
     // TODO: fallback UI 작업 필요
     return null;
@@ -68,6 +106,7 @@ export default function FundingDetailPage({
         isWriter ? null : (
           <DetailActionBar
             buttonText="선물하기"
+            handleShare={handleShare}
             handleSubmit={() =>
               router.push(`/fundings/${params.fundId}/donate`)
             }
