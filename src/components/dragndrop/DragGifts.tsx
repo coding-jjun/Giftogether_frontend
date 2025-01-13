@@ -33,8 +33,8 @@ export default function DragGifts() {
 
   const DndId = useId(); // 각 dndContext에 고유한 id를 할당하기 위한 훅
   const [active, setActive] = useState<Active | null>(null);
-  // 현재 드래그 중인 기프트 항목 추적
-  const activeItem = fields.find(({ id }) => id === active?.id);
+  const activeItem = fields.find(({ id }) => id === active?.id); // 현재 드래그 중인 기프트 항목
+
   const [primaryIndex, setPrimaryIndex] = useState<number | null>(null);
 
   const handleSetPrimary = (index: number) => {
@@ -71,7 +71,6 @@ export default function DragGifts() {
   };
 
   // 드래그된 항목의 id와 드롭된 위치의 id를 비교한 후 gifts 배열의 순서 변경
-  // 순서를 변경한 후 giftOrd 다시 업데이트
   const handleDragEnd = (event: DragEvent) => {
     const { active, over } = event;
 
@@ -91,10 +90,8 @@ export default function DragGifts() {
     setActive(null);
   };
 
-  const handleDelete = (id: string | undefined) => {
-    // console.log("delete id: ", id);
-    const targetIdx = fields.findIndex(({ id }) => id === id);
-    // console.log("delete index: ", targetIdx);
+  const handleDelete = (targetId: string) => {
+    const targetIdx = fields.findIndex(({ id }) => id === targetId);
     if (targetIdx !== -1) {
       remove(targetIdx);
     }
@@ -111,7 +108,7 @@ export default function DragGifts() {
       >
         <DroppableGiftForm
           gifts={fields}
-          onDelete={() => handleDelete(activeItem?.id)}
+          onDelete={handleDelete}
           primaryIndex={primaryIndex}
           setPrimaryIndex={handleSetPrimary}
         />
