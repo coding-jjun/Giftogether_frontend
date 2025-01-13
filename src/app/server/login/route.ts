@@ -45,8 +45,12 @@ export async function POST(request: Request): Promise<NextResponse> {
       httpOnly: false,
       expires,
     });
-    res.cookies.set("refreshToken", refreshToken, cookieOptions);
-    res.cookies.set("userId", tokenPayload.sub, { ...cookieOptions, expires });
+    res.cookies.set("refresh_token", refreshToken, cookieOptions);
+    res.cookies.set("userId", tokenPayload.sub, {
+      ...cookieOptions,
+      httpOnly: false,
+      expires,
+    });
 
     if (user?.userNick) {
       res.cookies.set("nickname", user.userNick, { ...cookieOptions, expires });
