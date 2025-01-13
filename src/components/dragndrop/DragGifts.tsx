@@ -51,6 +51,8 @@ export default function DragGifts() {
 
   // 새로운 기프트 카드 추가
   const handleAddForm = () => {
+    if (fields.length >= 5) return; // 최대 5개까지만 추가 가능
+
     append({
       id: uuidv4(),
       giftOrd: fields.length + 1, // ord 1부터 시작
@@ -127,8 +129,8 @@ export default function DragGifts() {
         </DragOverlay>
       </DndContext>
 
-      {/* 아이템 추가 */}
-      <AddGiftForm onSubmit={handleAddForm} />
+      {/* 아이템 추가 - 5개 미만일 때만 표시 */}
+      {fields.length < 5 && <AddGiftForm onSubmit={handleAddForm} />}
     </>
   );
 }
