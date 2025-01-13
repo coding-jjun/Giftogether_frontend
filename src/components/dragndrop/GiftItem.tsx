@@ -54,7 +54,7 @@ export default function GiftItem({
       try {
         const response = await axiosInstance.post("/server/metadata", { url });
         setThumbnail(response.data.image || DUMMY);
-        setValue(`gifts[${index-1}].giftImg`, response.data.image || null);
+        setValue(`gifts[${index}].giftImg`, response.data.image || null);
       } catch (error) {
         console.error("메타데이터 fetch error", error);
         setThumbnail(DUMMY);
