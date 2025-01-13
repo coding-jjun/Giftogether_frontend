@@ -24,6 +24,7 @@
     "axios": "^1.6.8",
     "cookie": "^0.6.0",
     "dayjs": "^1.11.10",
+    "debounce": "^2.2.0",
     "framer-motion": "^11.2.0",
     "jose": "^5.9.6",
     "js-cookie": "^3.0.5",
@@ -36,7 +37,8 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "recoil": "^0.7.7",
-    "swiper": "^11.1.4"
+    "swiper": "^11.1.4",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

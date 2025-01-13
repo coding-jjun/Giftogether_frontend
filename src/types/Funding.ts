@@ -49,7 +49,6 @@ export interface FundingDto {
 
 // 펀딩글 등록 시 사용
 export interface FundingForm {
-  fundId: number;
   fundTitle: string;
   fundCont: string;
   fundTheme: FundTheme;

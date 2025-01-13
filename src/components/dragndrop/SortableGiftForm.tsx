@@ -4,7 +4,7 @@ import GiftItem from "@/components/dragndrop/GiftItem";
 import GiftDto from "@/types/GiftDto";
 
 interface Props {
-  id: number;
+  id: string;
   giftOrd: number;
   gifts: GiftDto[];
   onDelete: () => void;
@@ -23,7 +23,7 @@ export default function SortableGiftForm({
   return (
     <GiftItem
       id={id}
-      index={id}
+      index={giftOrd}
       gifts={gifts}
       onDelete={onDelete}
       primaryIndex={primaryIndex}

@@ -3,14 +3,13 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CloseIcon } from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
-
 import { CSS } from "@dnd-kit/utilities";
 import GiftDto from "@/types/GiftDto";
 
 interface Props {
   gifts: GiftDto[];
-  id: number;
-  onDelete: (id: number) => void;
+  id: string;
+  onDelete: (id: string) => void;
 }
 
 export default function DragHandler({ gifts, id, onDelete }: Props) {

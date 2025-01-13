@@ -1,15 +1,9 @@
+import { useState } from "react";
 import { Button, Grid } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import DragGifts from "@/components/dragndrop/DragGifts";
-import React, { useState } from "react";
-import GiftDto from "@/types/GiftDto";
 
-interface Props {
-  gifts: GiftDto[];
-  setGifts: (updateFunction: (currentGifts: GiftDto[]) => GiftDto[]) => void;
-}
-
-export default function GiftComponent({ gifts, setGifts }: Props) {
+export default function GiftComponent() {
   const [showItems, setShowItems] = useState<boolean>(true);
   const toggleGifts = () => {
     setShowItems(!showItems);
@@ -28,7 +22,7 @@ export default function GiftComponent({ gifts, setGifts }: Props) {
         ITEMS
       </Button>
       <div style={{ display: showItems ? "block" : "none" }}>
-        <DragGifts gifts={gifts} setGifts={setGifts} />
+        <DragGifts />
       </div>
     </Grid>
   );

@@ -1,5 +1,5 @@
 export default interface GiftDto {
-  id: number;
+  id: string;
   giftImg?: string | null;
   giftOrd: number;
   giftTitle: string;
