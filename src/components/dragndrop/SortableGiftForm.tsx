@@ -1,11 +1,9 @@
-import React from "react";
-
 import GiftItem from "@/components/dragndrop/GiftItem";
 import GiftDto from "@/types/GiftDto";
 
 interface Props {
   id: string;
-  giftOrd: number;
+  index: number;
   gifts: GiftDto[];
   onDelete: () => void;
   primaryIndex: number | null;
@@ -14,7 +12,7 @@ interface Props {
 
 export default function SortableGiftForm({
   id,
-  giftOrd,
+  index,
   gifts,
   onDelete,
   primaryIndex,
@@ -23,7 +21,7 @@ export default function SortableGiftForm({
   return (
     <GiftItem
       id={id}
-      index={giftOrd}
+      index={index}
       gifts={gifts}
       onDelete={onDelete}
       primaryIndex={primaryIndex}

@@ -57,8 +57,8 @@ export default function FundingCreationPage() {
 
     const updatedGifts = rest.gifts.map((gift: GiftDto, index: number) => ({
       ...gift,
-      giftOrd: index + 1
-    }))
+      giftOrd: index + 1,
+    }));
 
     const submitData = {
       ...rest,

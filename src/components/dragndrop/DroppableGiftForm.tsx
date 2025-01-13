@@ -1,6 +1,8 @@
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import SortableGiftForm from "@/components/dragndrop/SortableGiftForm";
-
 import GiftDto from "@/types/GiftDto";
 
 interface Prop {
@@ -20,13 +22,13 @@ export function DroppableGiftForm({
     <SortableContext items={gifts} strategy={verticalListSortingStrategy}>
       {gifts.map((gift, index) => (
         <SortableGiftForm
-          primaryIndex={primaryIndex}
-          setPrimaryIndex={setPrimaryIndex}
           key={gift.id}
           id={gift.id}
-          giftOrd={index}
           gifts={gifts}
+          index={index}
           onDelete={() => onDelete(gift.id)}
+          primaryIndex={primaryIndex}
+          setPrimaryIndex={setPrimaryIndex}
         />
       ))}
     </SortableContext>

@@ -1,7 +1,6 @@
 import { IconButton } from "@mui/material";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CloseIcon } from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
-import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import GiftDto from "@/types/GiftDto";
@@ -33,19 +32,26 @@ export default function DragHandler({ gifts, id, onDelete }: Props) {
 
   return (
     <div style={{ display: "flex", justifyContent: "flex-end" }}>
-      <div style={style} ref={setNodeRef} {...attributes} {...listeners}>
-        <IconButton>
-          <DragIndicatorIcon />
-        </IconButton>
-      </div>
       {gifts.length === 1 ? (
-        <IconButton disabled>
-          <CloseIcon />
-        </IconButton>
+        <>
+          <IconButton disabled>
+            <DragIndicatorIcon />
+          </IconButton>
+          <IconButton disabled>
+            <CloseIcon />
+          </IconButton>
+        </>
       ) : (
-        <IconButton onClick={() => onDelete(id)} size="small">
-          <CloseIcon />
-        </IconButton>
+        <>
+          <div style={style} ref={setNodeRef} {...attributes} {...listeners}>
+            <IconButton>
+              <DragIndicatorIcon />
+            </IconButton>
+          </div>
+          <IconButton onClick={() => onDelete(id)} size="small">
+            <CloseIcon />
+          </IconButton>
+        </>
       )}
     </div>
   );
