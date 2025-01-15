@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Card, CardContent, IconButton, TextField } from "@mui/material";
 import { FieldErrors, useFormContext, useWatch } from "react-hook-form";
 import GiftDto from "@/types/GiftDto";
@@ -6,20 +6,15 @@ import DragHandler from "@/components/dragndrop/DragHandler";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import axiosInstance from "@/utils/axios";
+import { debounce } from "lodash";
 
 interface GiftItemProps {
-  id: number;
+  id: string;
   index: number;
   gifts: GiftDto[];
   onDelete: () => void;
   primaryIndex: number | null;
   setPrimaryIndex: (index: number) => void;
-}
-
-interface MetadataResponse {
-  title?: string;
-  description?: string;
-  image?: string;
 }
 
 export default function GiftItem({
@@ -38,16 +33,14 @@ export default function GiftItem({
   } = useFormContext();
   const giftUrl = useWatch({
     control,
-    name: `gifts[${index - 1}].giftUrl`,
+    name: `gifts[${index}].giftUrl`,
   });
 
   const DUMMY: string = "/dummy/present.webp";
-
   const [thumbnail, setThumbnail] = useState<string | null>(null);
 
   // 현재 대표 이미지 여부를 primaryIndex로 확인
   const isPrimary = primaryIndex === index;
-
   const giftsErrors = errors.gifts as FieldErrors<GiftDto>[] | undefined;
 
   useEffect(() => {
@@ -57,33 +50,25 @@ export default function GiftItem({
       return;
     }
 
-    if (giftUrl) {
-      const fetchMetadata = async () => {
-        try {
-          const response = await axiosInstance.post<MetadataResponse>(
-            "/server/metadata",
-            {
-              url: giftUrl,
-            },
-          );
-          const imageUrl = response.data.image || null;
-          setThumbnail(response.data.image || DUMMY);
-          setValue(`gifts[${index - 1}].giftImg`, imageUrl);
-        } catch (error) {
-          console.error("metadata를 불러오는데 실패했어요.", error);
-          setThumbnail(DUMMY);
-          setValue(`gifts[${index - 1}].giftImg`, null);
-        }
-      };
+    const fetchMetadata = debounce(async (url) => {
+      try {
+        const response = await axiosInstance.post("/server/metadata", { url });
+        setThumbnail(response.data.image || DUMMY);
+        setValue(`gifts[${index}].giftImg`, response.data.image || null);
+      } catch (error) {
+        console.error("메타데이터 fetch error", error);
+        setThumbnail(DUMMY);
+      }
+    }, 500);
 
-      fetchMetadata();
-    }
-  }, [giftUrl, setValue]);
+    if (giftUrl) fetchMetadata(giftUrl);
+    return () => fetchMetadata.cancel();
+  }, [giftUrl, setValue, index]);
 
   // 대표이미지 설정하는 함수
   const handleSetPrimary = () => {
     setPrimaryIndex(index); // 부모의 primaryIndex 업데이트
-    setValue(`gifts[${index - 1}].isPrimary`, !isPrimary);
+    setValue(`gifts[${index}].isPrimary`, !isPrimary);
   };
 
   return (
@@ -144,49 +129,35 @@ export default function GiftItem({
         {/*입력폼*/}
         <Box sx={{ flexGrow: 1 }}>
           <TextField
-            {...register(`gifts[${index - 1}].giftUrl`, {
+            {...register(`gifts[${index}].giftUrl`, {
               required: "url을 첨부해주세요.",
             })}
             helperText={
-              giftsErrors?.[index - 1]?.giftUrl?.message?.toString() || ""
+              giftsErrors?.[index]?.giftUrl?.message?.toString() || ""
             }
             placeholder="url"
             size="small"
             fullWidth
             margin="dense"
             InputLabelProps={{ shrink: true }}
-            sx={{
-              borderRadius: 4,
-              backgroundColor: "#ECF0EF",
-              "& .MuiFormHelperText-root": {
-                color: "#d32f2f",
-                pb: "2px",
-              },
-            }}
+            sx={formStylesWithValidation}
           />
           <TextField
-            {...register(`gifts[${index - 1}].giftTitle`, {
+            {...register(`gifts[${index}].giftTitle`, {
               required: "제목을 입력해주세요.",
             })}
             helperText={
-              giftsErrors?.[index - 1]?.giftTitle?.message?.toString() || ""
+              giftsErrors?.[index]?.giftTitle?.message?.toString() || ""
             }
             placeholder="제목"
             size="small"
             fullWidth
             margin="dense"
             InputLabelProps={{ shrink: true }}
-            sx={{
-              borderRadius: 4,
-              backgroundColor: "#ECF0EF",
-              "& .MuiFormHelperText-root": {
-                color: "#d32f2f",
-                pb: "2px",
-              },
-            }}
+            sx={formStylesWithValidation}
           />
           <TextField
-            {...register(`gifts[${index - 1}].giftOpt`)}
+            {...register(`gifts[${index}].giftOpt`)}
             placeholder="옵션"
             size="small"
             fullWidth
@@ -198,31 +169,33 @@ export default function GiftItem({
             }}
           />
           <TextField
-            {...register(`gifts[${index - 1}].giftCont`, {
+            {...register(`gifts[${index}].giftCont`, {
               maxLength: {
                 value: 20,
                 message: "20자 이내로 입력해주세요.",
               },
             })}
             helperText={
-              giftsErrors?.[index - 1]?.giftCont?.message?.toString() || ""
+              giftsErrors?.[index]?.giftCont?.message?.toString() || ""
             }
             placeholder="설명"
             size="small"
             fullWidth
             margin="dense"
             InputLabelProps={{ shrink: true }}
-            sx={{
-              borderRadius: 4,
-              backgroundColor: "#ECF0EF",
-              "& .MuiFormHelperText-root": {
-                color: "#d32f2f",
-                pb: "2px",
-              },
-            }}
+            sx={formStylesWithValidation}
           />
         </Box>
       </CardContent>
     </Card>
   );
 }
+
+const formStylesWithValidation = {
+  borderRadius: 4,
+  backgroundColor: "#ECF0EF",
+  "& .MuiFormHelperText-root": {
+    color: "#d32f2f",
+    pb: "2px",
+  },
+};
