@@ -6,8 +6,8 @@ interface Props {
   index: number;
   gifts: GiftDto[];
   onDelete: () => void;
-  primaryIndex: number | null;
-  setPrimaryIndex: (index: number) => void;
+  primaryGiftId: string;
+  setPrimaryGiftId: (id: string) => void;
 }
 
 export default function SortableGiftForm({
@@ -15,8 +15,8 @@ export default function SortableGiftForm({
   index,
   gifts,
   onDelete,
-  primaryIndex,
-  setPrimaryIndex,
+  primaryGiftId,
+  setPrimaryGiftId,
 }: Props) {
   return (
     <GiftItem
@@ -24,8 +24,8 @@ export default function SortableGiftForm({
       index={index}
       gifts={gifts}
       onDelete={onDelete}
-      primaryIndex={primaryIndex}
-      setPrimaryIndex={setPrimaryIndex}
+      primaryGiftId={primaryGiftId}
+      setPrimaryGiftId={setPrimaryGiftId}
     />
   );
 }

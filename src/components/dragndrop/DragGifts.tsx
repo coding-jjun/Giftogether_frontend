@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import {
   DndContext,
   useSensor,
@@ -25,7 +25,7 @@ interface DragEvent {
 }
 
 export default function DragGifts() {
-  const { control } = useFormContext<FundingForm>();
+  const { control, setValue } = useFormContext<FundingForm>();
   const { fields, append, remove, swap } = useFieldArray({
     name: "gifts",
     control,
@@ -35,10 +35,27 @@ export default function DragGifts() {
   const [active, setActive] = useState<Active | null>(null);
   const activeItem = fields.find(({ id }) => id === active?.id); // 현재 드래그 중인 기프트 항목
 
-  const [primaryIndex, setPrimaryIndex] = useState<number | null>(null);
+  // 대표이미지로 설정된 gift의 id 저장
+  const [primaryGiftId, setPrimaryGiftId] = useState<string>("");
 
-  const handleSetPrimary = (index: number) => {
-    setPrimaryIndex(index);
+  // 컴포넌트 마운트 시 첫 번째 아이템을 대표이미지로 설정
+  useEffect(() => {
+    if (fields.length > 0 && !primaryGiftId) {
+      setPrimaryGiftId(fields[0].id);
+    }
+  }, [fields]);
+
+  // gifts 배열 변화 감지하여 대표이미지 업데이트
+  useEffect(() => {
+    const primaryGift = fields.find((gift) => gift.id === primaryGiftId);
+    if (primaryGift?.giftImg) {
+      setValue("fundImg", primaryGift.giftImg);
+    }
+  }, [fields, primaryGiftId, setValue]);
+
+  // 대표이미지 설정 핸들러
+  const handleSetPrimary = (id: string) => {
+    setPrimaryGiftId(id);
   };
 
   const sensors = useSensors(
@@ -46,7 +63,7 @@ export default function DragGifts() {
     useSensor(TouchSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   // 새로운 기프트 카드 추가
@@ -109,8 +126,8 @@ export default function DragGifts() {
         <DroppableGiftForm
           gifts={fields}
           onDelete={handleDelete}
-          primaryIndex={primaryIndex}
-          setPrimaryIndex={handleSetPrimary}
+          primaryGiftId={primaryGiftId}
+          setPrimaryGiftId={handleSetPrimary}
         />
         <DragOverlay>
           {active?.id && activeItem ? (
@@ -119,8 +136,8 @@ export default function DragGifts() {
               index={fields.findIndex((field) => field.id === activeItem.id)}
               gifts={fields}
               onDelete={() => handleDelete(activeItem.id)}
-              primaryIndex={primaryIndex}
-              setPrimaryIndex={setPrimaryIndex}
+              primaryGiftId={primaryGiftId}
+              setPrimaryGiftId={handleSetPrimary}
             />
           ) : null}
         </DragOverlay>
