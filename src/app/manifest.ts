@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Giftogether",
+    name: "기프투게더",
     short_name: "Giftogether",
     description: "Giftogether",
     theme_color: "#f5f5f5",

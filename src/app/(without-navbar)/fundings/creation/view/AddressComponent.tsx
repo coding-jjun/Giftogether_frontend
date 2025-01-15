@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -102,7 +102,7 @@ export default function AddressComponent({
           변경
         </Button>
       </Box>
-      <Box display="flex" width="100%" sx={{ mt: 0.5, mb: 9 }}>
+      <Box display="flex" width="100%" sx={{ mt: 0.5 }}>
         <TextField
           {...register("fundAddr")}
           InputLabelProps={{
