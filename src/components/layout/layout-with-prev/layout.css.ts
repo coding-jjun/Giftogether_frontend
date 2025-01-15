@@ -57,7 +57,7 @@ export const footer = style({
   justifyContent: "space-around",
   alignItems: "center",
   zIndex: 1000,
-  height: "70px",
+  height: "85px",
   backdropFilter: "blur(10px)",
   background:
     "linear-gradient(to top, rgba(255, 255, 255), rgba(255, 255, 255, 0.7))",
