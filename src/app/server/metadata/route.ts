@@ -12,7 +12,14 @@ export async function POST(request: NextRequest) {
     // Puppeteer 브라우저 실행
     const browser = await puppeteer.launch({
       headless: true, // 최신 Headless 모드
-      args: ["--no-sandbox", "--disable-setuid-sandbox"], // 서버 환경에서 안정적으로 실행
+      executablePath: "/usr/bin/chromium-browser",
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--ignore-certificate-errors",
+      ]
     });
     const page = await browser.newPage();
 
