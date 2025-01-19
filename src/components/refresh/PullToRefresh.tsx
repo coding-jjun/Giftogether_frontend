@@ -9,7 +9,8 @@ interface PullToRefreshProps {
 
 const PullToRefresh = ({ refreshData }: PullToRefreshProps) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [startScroll, setStartScroll] = useState(0);
+  const [isPulling, setIsPulling] = useState(false);
+  const [startY, setStartY] = useState(0);
 
   const triggerVibration = () => {
     if ("vibrate" in navigator) {
@@ -18,14 +19,10 @@ const PullToRefresh = ({ refreshData }: PullToRefreshProps) => {
   };
 
   useEffect(() => {
-    let startY = 0;
-    let isPulling = false;
-
     const handleTouchStart = (e: TouchEvent) => {
       if (window.scrollY === 0) {
-        startY = e.touches[0].pageY;
-        setStartScroll(window.scrollY);
-        isPulling = true;
+        setStartY(e.touches[0].pageY);
+        setIsPulling(true);
       }
     };
 
@@ -34,6 +31,7 @@ const PullToRefresh = ({ refreshData }: PullToRefreshProps) => {
 
       const currentY = e.touches[0].pageY;
       if (currentY - startY > 100) {
+        e.preventDefault();
         setIsRefreshing(true);
       }
     };
@@ -44,8 +42,7 @@ const PullToRefresh = ({ refreshData }: PullToRefreshProps) => {
         await refreshData();
       }
       setIsRefreshing(false);
-      window.scrollTo({ top: startScroll, behavior: "smooth" });
-      isPulling = false;
+      setIsPulling(false);
     };
 
     window.addEventListener("touchstart", handleTouchStart);
@@ -57,15 +54,15 @@ const PullToRefresh = ({ refreshData }: PullToRefreshProps) => {
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isRefreshing, refreshData, startScroll]);
+  }, [isPulling, isRefreshing, startY, refreshData]);
 
   return (
     <>
-      {isRefreshing ? (
+      {isRefreshing && (
         <div className={loadingContainer}>
           <DotLottieReact src="/animation/loading.lottie" autoplay loop />
         </div>
-      ) : null}
+      )}
     </>
   );
 };
