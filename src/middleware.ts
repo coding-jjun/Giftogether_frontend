@@ -12,11 +12,14 @@ export async function middleware(request: NextRequest) {
     response.headers.set("viewport", viewport);
   }
 
+  let isAuthorized = false;
   const cookieSession = (await cookies()).get("access_token")?.value;
-  const session = await decrypt(cookieSession);
 
-  const isAuthorized =
-    session && session.exp && session?.exp * 1000 > new Date().getTime();
+  if (cookieSession) {
+    const session = await decrypt(cookieSession);
+    isAuthorized =
+      !!session && !!session.exp && session?.exp * 1000 > new Date().getTime();
+  }
 
   if (!isAuthorized && shouldCheckAuth(request)) {
     return NextResponse.redirect(new URL("/login", request.url));

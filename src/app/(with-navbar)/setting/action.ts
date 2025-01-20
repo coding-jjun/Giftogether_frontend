@@ -9,11 +9,21 @@ export async function logout() {
   const refreshToken = cookieStore.get("refresh_token");
 
   if (refreshToken) {
+    const cookieHeader = cookieStore
+      .getAll()
+      .map((cookie) => `${cookie.name}=${cookie.value}`)
+      .join("; ");
+
     try {
       const { data } = await axiosInstance.post(
         "https://api.giftogether.co.kr/auth/logout",
         {
           refreshToken: refreshToken.value,
+        },
+        {
+          headers: {
+            Cookie: cookieHeader,
+          },
         },
       );
       if (data?.data) {
@@ -21,11 +31,12 @@ export async function logout() {
         cookieStore.delete("refresh_token");
         cookieStore.delete("userId");
         cookieStore.delete("nickname");
-        redirect("/");
       }
     } catch (e) {
       console.error(e);
       throw new Error("로그아웃 실패");
     }
+
+    redirect("/");
   }
 }
