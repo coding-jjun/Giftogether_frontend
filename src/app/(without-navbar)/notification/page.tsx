@@ -1,8 +1,7 @@
 "use client";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
-import React, { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import FilterButtonGroup from "@/components/theme/components/FilterButtonGroup";
 import useNotificationsQuery from "@/query/useNotificationsQuery";
 import {
@@ -18,8 +17,8 @@ import LayoutWithPrev from "@/components/layout/layout-with-prev";
 import theme from "@/components/theme";
 
 export default function AlarmHistoryPage() {
-  const router = useRouter();
   const [filter, setFilter] = useState<NotiFilter>("all");
+  const [hasVisited, setHasVisited] = useState<boolean>(false); // 페이지 방문 플래그
 
   const entryTimeRef = useRef(new Date()); // 페이지 진입 시점 기록
   const { mutate: readNoti } = useReadNotification(entryTimeRef.current); // isRead: false -> true
@@ -47,6 +46,17 @@ export default function AlarmHistoryPage() {
     rootMargin: "0px",
     threshold: 1.0,
   });
+
+  useEffect(() => {
+    return () => {
+      if (hasVisited) readNoti();
+    };
+  }, [readNoti, hasVisited]);
+
+  // 읽지 않은 알림 확인 후 페이지 나가면 방문한 페이지로 설정
+  useEffect(() => {
+    setHasVisited(true);
+  }, []);
 
   if (!notificationResponse) {
     return <></>;
