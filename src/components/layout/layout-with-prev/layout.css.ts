@@ -35,7 +35,7 @@ export const icon = style({
 export const titleSpan = style({
   fontSize: "18px",
   lineHeight: "22px",
-  fontWeight: 500,
+  fontWeight: 600,
   color: "#424242",
   position: "absolute",
   left: "50%",
