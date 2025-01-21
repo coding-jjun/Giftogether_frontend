@@ -15,8 +15,11 @@ import EmptyState from "@/components/empty-state/EmptyState";
 import useReadNotification from "@/query/useReadNotification";
 import LayoutWithPrev from "@/components/layout/layout-with-prev";
 import theme from "@/components/theme";
+import Error from "@/app/error";
+import { useRouter } from "next/navigation";
 
 export default function AlarmHistoryPage() {
+  const router = useRouter();
   const [filter, setFilter] = useState<NotiFilter>("all");
   const [hasVisited, setHasVisited] = useState<boolean>(false); // 페이지 방문 플래그
 
@@ -100,7 +103,12 @@ export default function AlarmHistoryPage() {
         {isLoading ? (
           <Typography>Loading...</Typography>
         ) : error ? (
-          <Typography>로딩 중 에러</Typography>
+          <Error
+            error={error}
+            reset={() => {
+              router.push("/notification");
+            }}
+          />
         ) : notificationResponse.pages.length !== 0 ? (
           <Grid spacing={2}>
             {/*읽지 않은 알림이 있을 때*/}
