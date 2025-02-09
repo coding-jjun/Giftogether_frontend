@@ -16,6 +16,7 @@ import FundUserNick from "@/app/(without-navbar)/fundings/[fundId]/view/FundUser
 import PullToRefresh from "@/components/refresh/PullToRefresh";
 import LayoutWithPrev from "@/components/layout/layout-with-prev";
 import { useToast } from "@/components/toast";
+import { NextLink } from "@/components/link";
 
 export default function FundingDetailPage({
   params,
@@ -48,10 +49,6 @@ export default function FundingDetailPage({
       setIsWriter(loginUserId === funding?.fundUserId);
     }
   }, [setCurrentFunding, funding, loginUserId]);
-
-  const handleEdit = () => {
-    router.push(`/fundings/${params.fundId}/edit`);
-  };
 
   const handleDelete = () => {
     if (params.fundId === "") return;
@@ -122,8 +119,13 @@ export default function FundingDetailPage({
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={handleEdit}>수정</MenuItem>
+          <NextLink href={`/fundings/${params.fundId}/edit`}>
+            <MenuItem>수정</MenuItem>
+          </NextLink>
           <MenuItem onClick={handleDelete}>삭제</MenuItem>
+          <NextLink href={`/fundings/${params.fundId}/donations`}>
+            <MenuItem>후원내역</MenuItem>
+          </NextLink>
         </Menu>
       )}
       <PullToRefresh refreshData={refetch} />
