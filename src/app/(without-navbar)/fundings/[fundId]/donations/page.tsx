@@ -10,14 +10,17 @@ interface DonationsPageProps {
   };
 }
 
-export default function DonationsPage({ params }: DonationsPageProps) {
+export default async function DonationsPage({ params }: DonationsPageProps) {
   const fundUuid = params.fundId;
 
   const queryClient = getQueryClient();
 
-  void queryClient.prefetchQuery({
+  await queryClient.prefetchInfiniteQuery({
     queryKey: ["donations", fundUuid],
     queryFn: () => fetchDonations(fundUuid),
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage.lastId,
+    pages: 1,
   });
 
   return (

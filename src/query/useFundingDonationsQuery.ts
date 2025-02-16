@@ -4,21 +4,19 @@ import {
   QueryKey,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import axiosInstance from "@/utils/axios";
 import { DonationListDto } from "@/types/Donation";
+import axiosInstance from "@/utils/axios";
 
 interface FundingDonationsResponse {
   donations: DonationListDto[];
-  lastId: number;
+  lastId?: number | null;
 }
 
-interface PageParam {
-  lastId: number | undefined;
-}
+type PageParam = number | undefined | null;
 
 export const fetchDonations = async (
   fundUuid: string,
-  lastId?: number,
+  lastId?: number | null,
 ): Promise<FundingDonationsResponse> => {
   const { data } = await axiosInstance.get(
     `/api/funding/${fundUuid}/donation`,
@@ -39,11 +37,8 @@ export const useFundingDonationsQuery = (fundUuid: string) => {
     PageParam
   >({
     queryKey: ["donations", fundUuid],
-    queryFn: ({ pageParam = { lastId: undefined } }) =>
-      fetchDonations(fundUuid, pageParam.lastId),
-    getNextPageParam: (lastPage) => {
-      return { lastId: lastPage.lastId };
-    },
-    initialPageParam: { lastId: undefined },
+    initialPageParam: undefined,
+    queryFn: ({ pageParam }) => fetchDonations(fundUuid, pageParam),
+    getNextPageParam: (lastPage) => lastPage.lastId,
   });
 };
