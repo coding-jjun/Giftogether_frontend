@@ -4,6 +4,7 @@ import { grey } from "@mui/material/colors";
 import { AvatarWithBadge } from "@/components/avatar";
 import { BottomSheet, useOverlay } from "@/components/overlay";
 import ProfileBottomSheet from "@/app/(with-navbar)/profile/[userId]/view/ProfileBottomSheet";
+import { useCookie } from "@/hook/useCookie";
 
 interface Props {
   imgSrc?: string;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export const ProfileImage = ({ imgSrc, onSubmit, userId }: Props) => {
+  const loginUserId = useCookie<number>("userId");
+
   // 오버레이 훅
   const overlay = useOverlay();
 
@@ -46,7 +49,7 @@ export const ProfileImage = ({ imgSrc, onSubmit, userId }: Props) => {
     handleClose();
   };
 
-  return (
+  return userId === loginUserId ? (
     <AvatarWithBadge
       imgSrc={imgSrc}
       badge={
@@ -56,6 +59,8 @@ export const ProfileImage = ({ imgSrc, onSubmit, userId }: Props) => {
       }
       onClick={openBottomSheet}
     />
+  ) : (
+    <AvatarWithBadge imgSrc={imgSrc} />
   );
 };
 
