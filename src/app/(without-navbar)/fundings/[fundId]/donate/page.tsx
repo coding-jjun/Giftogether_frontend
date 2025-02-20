@@ -53,6 +53,7 @@ export default function FundingDonatePage({
 
   return (
     <LayoutWithPrev
+      title="후원하기"
       actionBar={
         amount === 0 ? null : (
           <DetailActionBar buttonText="결제하기" handleSubmit={handleSubmit} />

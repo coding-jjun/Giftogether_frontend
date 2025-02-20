@@ -86,6 +86,7 @@ export default function GratitudeCreationPage({ params }: { params: Params }) {
 
   return (
     <LayoutWithPrev
+      title="감사인사"
       actionBar={
         <ActionBar>
           <ActionBarButton

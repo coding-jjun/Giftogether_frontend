@@ -24,7 +24,7 @@ export default function SignUpFormLayout({
   loading,
 }: Props) {
   return (
-    <LayoutWithPrev>
+    <LayoutWithPrev title="회원가입">
       <Container>
         <FormContainer>
           <SectionTitle>{title}</SectionTitle>
