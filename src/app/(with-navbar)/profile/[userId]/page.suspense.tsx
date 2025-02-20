@@ -17,7 +17,7 @@ export default function MyPageContent({ myId, friendId }: Props) {
 
   const { data: profileUser } = useUserQuery(friendId);
 
-  // 프로필 유저 - 진행중인 펀딩
+  // 프로필 유저 - 진행 중인 펀딩
   const { data: profileOngoingQuery } = useFundingsQuery(
     {
       fundPublFilter: "mine",

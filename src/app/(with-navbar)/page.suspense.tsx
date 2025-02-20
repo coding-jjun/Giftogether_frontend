@@ -72,7 +72,7 @@ export default function MainPageContent() {
                 <SwiperSlide key={`slide-${funding.fundUuid}`}>
                   <HorizontalImgCard
                     key={funding.fundUuid}
-                    image={funding.fundImg ?? "/dummy/present.webp"}
+                    image={funding.fundImgUrls[0] ?? "/dummy/present.webp"}
                     userId={funding.fundUserNick || "익명"}
                     title={funding.fundTitle}
                     theme={funding.fundTheme}
@@ -108,7 +108,7 @@ export default function MainPageContent() {
           .map((funding) => (
             <VerticalImgCard
               key={funding.fundUuid}
-              image={funding.fundImg ?? "/dummy/present.webp"}
+              image={funding.fundImgUrls[0] ?? "/dummy/present.webp"}
               userId={funding.fundUserNick || "익명"}
               title={funding.fundTitle}
               theme={funding.fundTheme}
