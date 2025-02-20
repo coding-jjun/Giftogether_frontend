@@ -5,7 +5,6 @@ import { FundingStatusValue } from "@/types/Funding.enum";
 import useFundingsQuery from "@/query/useFundingsQuery";
 import UserProfile from "./view/UserProfile";
 import { FundingList } from "./view/FundingList";
-import useCurrentUserQuery from "@/query/useCurrentUserQuery";
 import useUserQuery from "@/query/useUserQuery";
 
 interface Props {
@@ -16,32 +15,25 @@ interface Props {
 export default function MyPageContent({ myId, friendId }: Props) {
   const [tab, setTab] = useState<FundingStatusValue>("진행 중");
 
-  const { data: loginUser } = useCurrentUserQuery();
-  const { data: anotherUser } = useUserQuery(friendId);
+  const { data: profileUser } = useUserQuery(friendId);
 
-  // 나의 펀딩 - 진행중
-  const { data: ongoinMyFundingQueryResponse } = useFundingsQuery({
-    fundPublFilter: "mine",
-    status: "ongoing",
-  });
+  // 프로필 유저 - 진행중인 펀딩
+  const { data: profileOngoingQuery } = useFundingsQuery(
+    {
+      fundPublFilter: "mine",
+      status: "ongoing",
+    },
+    profileUser?.userId,
+  );
 
-  // 나의 펀딩 - 종료됨
-  const { data: endedMyFundingQueryResponse } = useFundingsQuery({
-    fundPublFilter: "mine",
-    status: "ended",
-  });
-
-  // 다른 사람들의 펀딩 - 진행중
-  const { data: ongoingOthersFundingQueryResponse } = useFundingsQuery({
-    fundPublFilter: "both",
-    status: "ongoing",
-  });
-
-  // 다른 사람들의 펀딩 - 종료됨
-  const { data: endedOthersFundingQueryResponse } = useFundingsQuery({
-    fundPublFilter: "both",
-    status: "ended",
-  });
+  // 프로필 유저 - 종료된 펀딩
+  const { data: profileEndedQuery } = useFundingsQuery(
+    {
+      fundPublFilter: "mine",
+      status: "ended",
+    },
+    profileUser?.userId,
+  );
 
   const handleTabChange = (
     event: SyntheticEvent,
@@ -49,17 +41,6 @@ export default function MyPageContent({ myId, friendId }: Props) {
   ) => {
     setTab(newTab);
   };
-
-  // 프로필 유저 정보
-  const profileUser = friendId === myId ? loginUser : anotherUser;
-  const profileOngoingQuery =
-    friendId === myId
-      ? ongoinMyFundingQueryResponse
-      : ongoingOthersFundingQueryResponse;
-  const profileEndedQuery =
-    friendId === myId
-      ? endedMyFundingQueryResponse
-      : endedOthersFundingQueryResponse;
 
   if (!profileUser) {
     // TODO: 유저정보가 없을 때
