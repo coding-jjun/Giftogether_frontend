@@ -101,7 +101,7 @@ const LoginComponent = () => {
   };
 
   return (
-    <LayoutWithPrev>
+    <LayoutWithPrev title="이메일 로그인">
       <Container>
         <Typography
           variant="h5"

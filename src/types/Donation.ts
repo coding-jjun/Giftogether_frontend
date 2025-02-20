@@ -13,6 +13,17 @@ export interface Donation {
   delAt: Date;
 }
 
+export interface DonationListDto {
+  donId: number;
+  donUserId: number;
+  donUserNick: string;
+  donUserImg: string;
+  orderId: string;
+  donStat: DonationStatus;
+  donAmnt: number;
+  regAt: string;
+}
+
 export interface MyDonationListDto {
   donId: number;
   fundUuid: string;

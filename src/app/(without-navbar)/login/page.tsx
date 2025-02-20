@@ -52,7 +52,7 @@ const Login = () => {
   }, []);
 
   return (
-    <LayoutWithPrev>
+    <LayoutWithPrev title="로그인">
       <StyledContainer>
         <Logo textSx={{ fontSize: "36px" }} />
         <Box sx={{ width: "80%" }}>
