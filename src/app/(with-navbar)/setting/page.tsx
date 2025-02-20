@@ -4,6 +4,7 @@ import { Avatar, Link, Stack, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import LogoutIcon from "@mui/icons-material/Logout";
 import useCurrentUserQuery from "@/query/useCurrentUserQuery";
 import { logout } from "@/app/(with-navbar)/setting/action";
@@ -64,6 +65,20 @@ export default function SettingPage() {
               sx={{ color: grey[500], fontSize: "26px" }}
             />
             <Typography sx={{ fontSize: "16px" }}>나의 후원내역</Typography>
+          </Stack>
+          <KeyboardArrowRightIcon sx={{ color: grey[800], fontSize: "30px" }} />
+        </Stack>
+      </Link>
+      <Link href="/setting/board">
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ p: "20px", borderBottom: "1px solid #e2e2e2" }}
+        >
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <AssignmentIcon sx={{ color: grey[500], fontSize: "26px" }} />
+            <Typography sx={{ fontSize: "16px" }}>게시판</Typography>
           </Stack>
           <KeyboardArrowRightIcon sx={{ color: grey[800], fontSize: "30px" }} />
         </Stack>
