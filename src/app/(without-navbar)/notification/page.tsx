@@ -1,13 +1,15 @@
 "use client";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FilterButtonGroup from "@/components/theme/components/FilterButtonGroup";
 import useNotificationsQuery from "@/query/useNotificationsQuery";
 import {
+  getNotiFilterKey,
   getNotiFilterValue,
   NotiFilter,
   NotiFilterMap,
+  NotiFilterValue,
 } from "@/types/Notification.enum";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import NotificationWrapper from "@/app/(without-navbar)/notification/view/NotificationWrapper";
@@ -17,10 +19,12 @@ import LayoutWithPrev from "@/components/layout/layout-with-prev";
 import theme from "@/components/theme";
 import Error from "@/app/error";
 import { useRouter } from "next/navigation";
+import { useRecoilState } from "recoil";
+import { notiFilterState } from "@/store/atoms/notiFilter";
 
 export default function AlarmHistoryPage() {
   const router = useRouter();
-  const [filter, setFilter] = useState<NotiFilter>("all");
+  const [filter, setFilter] = useRecoilState(notiFilterState);
   const [hasVisited, setHasVisited] = useState<boolean>(false); // 페이지 방문 플래그
 
   const entryTimeRef = useRef(new Date()); // 페이지 진입 시점 기록
@@ -33,7 +37,7 @@ export default function AlarmHistoryPage() {
     fetchNextPage,
     hasNextPage,
   } = useNotificationsQuery({
-    notiFilter: filter,
+    notiFilter: getNotiFilterKey(filter),
   });
 
   // 무한 스크롤
@@ -65,7 +69,7 @@ export default function AlarmHistoryPage() {
     return <></>;
   }
 
-  const handleFilterChange = (value: NotiFilter) => {
+  const handleFilterChange = (value: NotiFilterValue) => {
     setFilter(value);
   };
 
@@ -82,20 +86,23 @@ export default function AlarmHistoryPage() {
           position: "sticky",
           top: 52,
           zIndex: 1,
-          bgcolor: "white",
+          backgroundColor: "white",
           paddingX: 1,
         }}
       >
         <FilterButtonGroup fullWidth>
-          {Object.keys(NotiFilterMap).map((key) => (
-            <Button
-              key={key}
-              onClick={() => handleFilterChange(key as NotiFilter)}
-              style={filterButtonStyle(key === filter)}
-            >
-              {getNotiFilterValue(key as NotiFilter)}
-            </Button>
-          ))}
+          {Object.keys(NotiFilterMap).map((key) => {
+            const value = getNotiFilterValue(key as NotiFilter);
+            return (
+              <Button
+                key={key}
+                style={filterButtonStyle(value === filter)}
+                onClick={() => handleFilterChange(value)}
+              >
+                {value}
+              </Button>
+            );
+          })}
         </FilterButtonGroup>
       </Box>
 

@@ -15,7 +15,7 @@ import {
   selectedStatusState,
   selectedThemesState,
   selectedVisibilityState,
-} from "@/store/atoms/filter";
+} from "@/store/atoms/themeFilter";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import useFundingsQuery from "@/query/useFundingsQuery";
 import FilterSelectBar from "@/app/(with-navbar)/fundings/view/FilterSelectBar";
