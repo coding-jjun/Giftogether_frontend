@@ -3,7 +3,7 @@ import { Avatar, Badge } from "@mui/material";
 
 interface Props {
   imgSrc?: string;
-  badge: ReactNode;
+  badge?: ReactNode;
   onClick?: () => void;
   avatarSx?: CSSProperties;
 }

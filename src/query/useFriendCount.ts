@@ -9,7 +9,7 @@ interface QueryResponse {
 const fetchFriendCount = async (
   userId: number,
 ): Promise<CommonResponse<QueryResponse>> => {
-  const { data } = await axios.get(`/api/friends/${userId}`);
+  const { data } = await axios.get(`/api/friend/${userId}`);
   return data;
 };
 

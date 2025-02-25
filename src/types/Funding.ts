@@ -20,6 +20,7 @@ export interface Funding {
   endAt: string;
   regAt: string;
   fundUserNick?: string;
+  fundImgUrls: string[];
 }
 
 // 펀딩 상세 불러올 때 사용

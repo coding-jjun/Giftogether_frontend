@@ -9,23 +9,14 @@ import {
   ListItemText,
 } from "@mui/material";
 import { FriendQueryDto } from "@/types/Friend";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import EmptyState from "@/components/empty-state/EmptyState";
 import LayoutWithPrev from "@/components/layout/layout-with-prev";
 import DeleteFriendButton from "@/app/(without-navbar)/profile/[userId]/friends/view/DeleteFriendButton";
 
-interface Params {
-  params: {
-    userId: string;
-  };
-}
-
-export default function FriendsListPage({ params }: Params) {
+export default function FriendsListPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const userId = Number(params.userId);
-  const userNick = searchParams.get("userNick");
   const { data: friendsList } = useFriendsQuery();
 
   if (!friendsList) {
