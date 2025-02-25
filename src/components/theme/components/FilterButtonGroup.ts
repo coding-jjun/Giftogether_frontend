@@ -5,7 +5,7 @@ const FilterButtonGroup = styled(ButtonGroup)({
     borderColor: "#d0d0d0",
     flex: 1,
     borderRadius: 10,
-    color: "#4F4635",
+    color: "#000",
     backgroundColor: "#fff",
     margin: "5px",
     padding: "5px",

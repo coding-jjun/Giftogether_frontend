@@ -19,16 +19,8 @@ export default function NotificationWrapper({
   entryTimeRef,
 }: Props) {
   const router = useRouter();
-  const {
-    sendId,
-    sendImg,
-    sendNick,
-    notiType,
-    subId,
-    notiTime,
-    fundTitle,
-    isRead,
-  } = notification;
+  const { sendId, sendImg, sendNick, notiType, subId, notiTime, fundTitle } =
+    notification;
   const { mutate: readNoti } = useReadNotification(entryTimeRef.current); // isRead: false -> true
 
   const handleClickUserProfile = () => {
@@ -56,13 +48,7 @@ export default function NotificationWrapper({
       justifyContent="flex-start"
       alignItems="flex-start"
       spacing={2}
-      sx={{
-        px: 1.5,
-        py: 2.5,
-        width: "100%",
-        position: "relative",
-        backgroundColor: isRead ? "transparent" : "#fff6f6",
-      }}
+      sx={{ px: 3, py: 3, width: "100%", position: "relative" }}
     >
       {notiType !== NotiType.FundClose &&
         notiType !== NotiType.FundAchieve &&

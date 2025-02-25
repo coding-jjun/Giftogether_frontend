@@ -1,17 +1,7 @@
 "use client";
-import {
-  AppBar,
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
-import React, { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import FilterButtonGroup from "@/components/theme/components/FilterButtonGroup";
 import useNotificationsQuery from "@/query/useNotificationsQuery";
 import {
@@ -24,10 +14,14 @@ import NotificationWrapper from "@/app/(without-navbar)/notification/view/Notifi
 import EmptyState from "@/components/empty-state/EmptyState";
 import useReadNotification from "@/query/useReadNotification";
 import LayoutWithPrev from "@/components/layout/layout-with-prev";
+import theme from "@/components/theme";
+import Error from "@/app/error";
+import { useRouter } from "next/navigation";
 
 export default function AlarmHistoryPage() {
   const router = useRouter();
   const [filter, setFilter] = useState<NotiFilter>("all");
+  const [hasVisited, setHasVisited] = useState<boolean>(false); // 페이지 방문 플래그
 
   const entryTimeRef = useRef(new Date()); // 페이지 진입 시점 기록
   const { mutate: readNoti } = useReadNotification(entryTimeRef.current); // isRead: false -> true
@@ -41,12 +35,6 @@ export default function AlarmHistoryPage() {
   } = useNotificationsQuery({
     notiFilter: filter,
   });
-
-  // 뒤로가기 버튼 클릭
-  const handleClick = () => {
-    readNoti();
-    router.back();
-  };
 
   // 무한 스크롤
   const loadMore = () => {
@@ -62,6 +50,17 @@ export default function AlarmHistoryPage() {
     threshold: 1.0,
   });
 
+  useEffect(() => {
+    return () => {
+      if (hasVisited) readNoti();
+    };
+  }, [readNoti, hasVisited]);
+
+  // 읽지 않은 알림 확인 후 페이지 나가면 방문한 페이지로 설정
+  useEffect(() => {
+    setHasVisited(true);
+  }, []);
+
   if (!notificationResponse) {
     return <></>;
   }
@@ -71,132 +70,146 @@ export default function AlarmHistoryPage() {
   };
 
   const filterButtonStyle = (isActive: boolean) => ({
-    fontWeight: isActive ? "bold" : "normal",
-    backgroundColor: isActive ? "#ECF0EF" : "#fff",
-    borderColor: isActive ? "#4F4635" : "#d0d0d0",
-    color: isActive ? "#4F4635" : "#4F4635",
-    borderWidth: isActive ? "1.5px" : "1px",
+    backgroundColor: isActive ? theme.palette.primary.main : "#fff",
+    borderColor: isActive ? theme.palette.primary.main : "#d0d0d0",
+    color: isActive ? "#fff" : "#000",
   });
 
   return (
     <LayoutWithPrev title="알림">
-      <FilterButtonGroup fullWidth>
-        {Object.keys(NotiFilterMap).map((key) => (
-          <Button
-            key={key}
-            onClick={() => handleFilterChange(key as NotiFilter)}
-            style={filterButtonStyle(key === filter)}
-          >
-            {getNotiFilterValue(key as NotiFilter)}
-          </Button>
-        ))}
-      </FilterButtonGroup>
+      <Box
+        sx={{
+          position: "sticky",
+          top: 52,
+          zIndex: 1,
+          bgcolor: "white",
+          paddingX: 1,
+        }}
+      >
+        <FilterButtonGroup fullWidth>
+          {Object.keys(NotiFilterMap).map((key) => (
+            <Button
+              key={key}
+              onClick={() => handleFilterChange(key as NotiFilter)}
+              style={filterButtonStyle(key === filter)}
+            >
+              {getNotiFilterValue(key as NotiFilter)}
+            </Button>
+          ))}
+        </FilterButtonGroup>
+      </Box>
 
-      <Box>
-        <Stack spacing={2} sx={{ py: 2 }}>
-          {isLoading ? (
-            <Typography>Loading...</Typography>
-          ) : error ? (
-            <Typography>로딩 중 에러</Typography>
-          ) : notificationResponse.pages.length !== 0 ? (
-            <>
-              <Stack>
-                {/*읽지 않은 알림이 있을 때*/}
+      <Box sx={{ flexGrow: 1 }}>
+        {isLoading ? (
+          <Typography>Loading...</Typography>
+        ) : error ? (
+          <Error
+            error={error}
+            reset={() => {
+              router.push("/notification");
+            }}
+          />
+        ) : notificationResponse.pages.length !== 0 ? (
+          <Grid spacing={2}>
+            {/*읽지 않은 알림이 있을 때*/}
+            {notificationResponse?.pages
+              ?.flatMap((page) => page.noti)
+              .filter((notification) => !notification.isRead).length > 0 ? (
+              <Grid>
+                {/* 읽지 않은 알림 */}
+                <Grid sx={notiContainerStyles(false)}>
+                  {notificationResponse?.pages
+                    ?.flatMap((page) => page.noti)
+                    .filter((notification) => !notification.isRead)
+                    .map((notification) => (
+                      <NotificationWrapper
+                        key={`notification-${notification.notiId}`}
+                        notification={notification}
+                        entryTimeRef={entryTimeRef}
+                      />
+                    ))}
+                </Grid>
+
+                {/* 이전 알림 문구 표시*/}
+                <Grid
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    pt: 2,
+                    px: 1.5,
+                  }}
+                >
+                  <Grid
+                    sx={{
+                      flex: 1,
+                      borderBottom: "0.5px solid #bdbdbd",
+                      height: 0,
+                      marginRight: "8px",
+                    }}
+                  />
+                  <Typography variant="subtitle1" sx={{ color: "#bdbdbd" }}>
+                    이전 알림
+                  </Typography>
+                  <Grid
+                    sx={{
+                      flex: 1,
+                      borderBottom: "0.5px solid #bdbdbd",
+                      height: 0,
+                      marginLeft: "8px",
+                    }}
+                  />
+                </Grid>
+
+                {/* 이전 알림들  */}
+                <Grid sx={notiContainerStyles(true)}>
+                  {notificationResponse?.pages
+                    ?.flatMap((page) => page.noti)
+                    .filter((notification) => notification.isRead)
+                    .map((notification) => (
+                      <NotificationWrapper
+                        key={`notification-${notification.notiId}`}
+                        notification={notification}
+                        entryTimeRef={entryTimeRef}
+                      />
+                    ))}
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid sx={notiContainerStyles(true)}>
+                {/* 읽지 않은 알림이 없을 때: 이전 알림 문구 표시 없이 바로 읽은 알림 보여줌 */}
                 {notificationResponse?.pages
                   ?.flatMap((page) => page.noti)
-                  .filter((notification) => !notification.isRead).length > 0 ? (
-                  <>
-                    {/* 읽지 않은 알림 */}
-                    {notificationResponse?.pages
-                      ?.flatMap((page) => page.noti)
-                      .filter((notification) => !notification.isRead)
-                      .map((notification) => (
-                        <NotificationWrapper
-                          key={`notification-${notification.notiId}`}
-                          notification={notification}
-                          entryTimeRef={entryTimeRef}
-                        />
-                      ))}
-
-                    {/* 이전 알림 문구 표시*/}
-                    <Stack>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          pt: 2,
-                          px: 1.5,
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            flex: 1,
-                            borderBottom: "0.5px solid #bdbdbd",
-                            height: 0,
-                            marginRight: "8px",
-                          }}
-                        />
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "#bdbdbd" }}
-                        >
-                          이전 알림
-                        </Typography>
-                        <Box
-                          sx={{
-                            flex: 1,
-                            borderBottom: "0.5px solid #bdbdbd",
-                            height: 0,
-                            marginLeft: "8px",
-                          }}
-                        />
-                      </Box>
-                      {notificationResponse?.pages
-                        ?.flatMap((page) => page.noti)
-                        .filter((notification) => notification.isRead)
-                        .map((notification) => (
-                          <NotificationWrapper
-                            key={`notification-${notification.notiId}`}
-                            notification={notification}
-                            entryTimeRef={entryTimeRef}
-                          />
-                        ))}
-                    </Stack>
-                  </>
-                ) : (
-                  <>
-                    {/* 읽지 않은 알림이 없을 때: 이전 알림 문구 표시 없이 바로 읽은 알림 보여줌 */}
-                    {notificationResponse?.pages
-                      ?.flatMap((page) => page.noti)
-                      .filter((notification) => notification.isRead)
-                      .map((notification) => (
-                        <NotificationWrapper
-                          key={`notification-${notification.notiId}`}
-                          notification={notification}
-                          entryTimeRef={entryTimeRef}
-                        />
-                      ))}
-                  </>
-                )}
-              </Stack>
-            </>
-          ) : (
-            <EmptyState
-              icon={
-                <NotificationsOffIcon sx={{ fontSize: 60, color: "#FFC107" }} />
-              }
-              title={"앗, 아직 도착한 알림이 없어요"}
-              message={"새로운 소식이 도착하면 알려드릴게요!"}
-            />
-          )}
-          <div
-            className={"as"}
-            ref={observerRef}
-            style={{ height: "20px", background: "transparent" }}
+                  .filter((notification) => notification.isRead)
+                  .map((notification) => (
+                    <NotificationWrapper
+                      key={`notification-${notification.notiId}`}
+                      notification={notification}
+                      entryTimeRef={entryTimeRef}
+                    />
+                  ))}
+              </Grid>
+            )}
+          </Grid>
+        ) : (
+          <EmptyState
+            icon={
+              <NotificationsOffIcon sx={{ fontSize: 60, color: "#FFC107" }} />
+            }
+            title={"앗, 아직 도착한 알림이 없어요"}
+            message={"새로운 소식이 도착하면 알려드릴게요!"}
           />
-        </Stack>
+        )}
+        <div
+          className={"as"}
+          ref={observerRef}
+          style={{ height: "20px", background: "transparent" }}
+        />
       </Box>
     </LayoutWithPrev>
   );
 }
+
+const notiContainerStyles = (isRead: boolean) => ({
+  backgroundColor: isRead ? "transparent" : "#fff6f6",
+});
