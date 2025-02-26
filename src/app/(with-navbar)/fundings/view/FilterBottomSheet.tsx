@@ -8,7 +8,7 @@ import {
   selectedStatusState,
   selectedThemesState,
   selectedVisibilityState,
-} from "@/store/atoms/filter";
+} from "@/store/atoms/themeFilter";
 import {
   FundingPublFilterValue,
   FundingSortValue,
