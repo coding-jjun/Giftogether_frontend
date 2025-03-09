@@ -51,7 +51,7 @@ export default function MainPageContent() {
           }
           barSx={{ paddingBottom: "5px" }}
         />
-        {!session || !myFundingQueryResponse.pages.at(0)?.fundings?.length ? (
+        {!session || !myFundingQueryResponse?.pages.at(0)?.fundings?.length ? (
           <BoxButton
             handleClick={() => router.push("/fundings/creation")}
             content={
