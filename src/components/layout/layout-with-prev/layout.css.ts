@@ -62,3 +62,14 @@ export const footer = style({
   background:
     "linear-gradient(to top, rgba(255, 255, 255), rgba(255, 255, 255, 0.7))",
 });
+
+export const actionButton = style({
+  padding: "16px",
+  backgroundColor: "#F43C6B",
+  width: "calc(100% - 40px)",
+  borderRadius: "8px",
+  border: "none",
+  color: "white",
+  fontSize: "16px",
+  fontWeight: 500,
+});

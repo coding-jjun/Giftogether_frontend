@@ -1,4 +1,5 @@
 import {
+  AnyUseInfiniteQueryOptions,
   DefaultError,
   InfiniteData,
   QueryKey,
@@ -24,13 +25,14 @@ interface PageParam {
   lastId: number | undefined;
 }
 
-interface MyDonationsQueryResponse {
+export interface MyDonationsQueryResponse {
   donations: MyDonationListDto[];
   lastId: number;
 }
 
 const useMyDonationsQuery = (
   status: "ongoing" | "ended",
+  options?: Partial<AnyUseInfiniteQueryOptions>,
 ): UseInfiniteQueryResult<InfiniteData<MyDonationsQueryResponse>> => {
   return useInfiniteQuery<
     MyDonationsQueryResponse,
@@ -50,6 +52,7 @@ const useMyDonationsQuery = (
 
       return { lastId: lastPage.lastId };
     },
+    ...options,
   });
 };
 
