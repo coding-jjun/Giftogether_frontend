@@ -40,7 +40,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
 const ToastWrapper = styled.div`
   position: fixed;
   width: 100%;
-  bottom: 100px;
+  bottom: 110px;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;

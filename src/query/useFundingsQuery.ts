@@ -3,8 +3,9 @@ import {
   DefaultError,
   InfiniteData,
   QueryKey,
-  useSuspenseInfiniteQuery,
-  UseSuspenseInfiniteQueryResult,
+  useInfiniteQuery,
+  UseInfiniteQueryResult,
+  AnyUseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 import { FundingQueryParam, FundingQueryResponse } from "@/types/Funding";
 import { CommonResponse } from "@/types/CommonResponse";
@@ -78,8 +79,9 @@ interface PageParam {
 const useFundingsQuery = (
   queryParams: Partial<FundingQueryParam>,
   userId?: number,
-): UseSuspenseInfiniteQueryResult<InfiniteData<FundingQueryResponse>> => {
-  return useSuspenseInfiniteQuery<
+  options?: Partial<AnyUseInfiniteQueryOptions>,
+): UseInfiniteQueryResult<InfiniteData<FundingQueryResponse>> => {
+  return useInfiniteQuery<
     FundingQueryResponse,
     DefaultError,
     InfiniteData<FundingQueryResponse>,
@@ -109,6 +111,7 @@ const useFundingsQuery = (
         lastEndAt: lastPage.lastEndAt,
       };
     },
+    ...options,
   });
 };
 
